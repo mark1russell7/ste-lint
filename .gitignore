@@ -1,5 +1,5 @@
 node_modules/
-dist/
+# dist/ is committed: a git dependency then needs no build at install. CI checks that it agrees with src/.
 *.tsbuildinfo
 coverage/
 

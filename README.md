@@ -44,12 +44,7 @@ The package is not on npm. Add it from GitHub as a development dependency of the
 pnpm add -D github:mark1russell7/ste-lint
 ```
 
-The install builds the package (`prepare`), and pnpm 11 and later starts that build only for an approved package. Approve the repository in `pnpm-workspace.yaml`. Then a new commit of `ste-lint` needs no new approval:
-
-```yaml
-allowBuilds:
-  "@mark1russell7/ste-lint@git+https://github.com/mark1russell7/ste-lint.git": true
-```
+The repository contains the built code in `dist/`, thus the install builds nothing and needs no approval in `pnpm-workspace.yaml`.
 
 Add a script to the root `package.json`, and put a `ste.config.json` at the root (refer to [Configuration](#configuration)):
 
@@ -221,6 +216,8 @@ pnpm test
 pnpm build      # dist/
 pnpm lint:ste   # this README and the doc comments of src/
 ```
+
+After a change to `src/`, start `pnpm build` and commit `dist/` too. CI fails when `dist/` does not agree with `src/`.
 
 The package started as `@lag/ste-lint` in the [lag](https://github.com/mark1russell7/lag) repository. Its history came with it.
 

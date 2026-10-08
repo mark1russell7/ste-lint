@@ -27,5 +27,8 @@ jobs:
       - run: pnpm typecheck
       - run: pnpm test
       - run: pnpm build
+      # dist/ is committed, so that a git dependency needs no build at install
+      - name: dist/ agrees with src/
+        run: git diff --exit-code --stat -- dist && test -z "$(git status --porcelain -- dist)"
       # The writing rules (ASD-STE100) of the README and the doc comments
       - run: pnpm lint:ste

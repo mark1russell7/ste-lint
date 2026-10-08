@@ -22,6 +22,7 @@
   },
   "files": [
     "dist",
+    "src",
     "ste.config.schema.json"
   ],
   "repository": {
@@ -30,7 +31,6 @@
   },
   "scripts": {
     "build": "tsc -b",
-    "prepare": "tsc -b",
     "typecheck": "tsc -p tsconfig.test.json",
     "test": "vitest run",
     "lint:ste": "tsx src/cli.ts"
