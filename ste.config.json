@@ -1,0 +1,31 @@
+{
+  "$schema": "./ste.config.schema.json",
+  "include": [
+    "README.md",
+    "src/**/*.ts"
+  ],
+  "ignore": [
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/*.d.ts",
+    "**/*.test.ts"
+  ],
+  "technicalNouns": [],
+  "technicalVerbs": [],
+  "properNouns": [
+    "ASD",
+    "ASD-STE100",
+    "Anthropic",
+    "Claude",
+    "CommonMark",
+    "GitHub",
+    "JSON",
+    "Markdown",
+    "MDX",
+    "pnpm",
+    "Simplified Technical English",
+    "STEMG",
+    "TSDoc",
+    "TypeScript"
+  ]
+}

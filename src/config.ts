@@ -78,12 +78,10 @@ export const DEFAULT_INCLUDE : readonly string[] = [
     "README.md",
     "docs/**/*.{md,mdx}",
     "packages/*/README.md",
-    "packages/site/**/*.{md,mdx}",
     "packages/*/src/**/*.{ts,tsx}",
     "packages/*/build/**/*.{ts,tsx}",
     "packages/*/commands/**/*.{ts,tsx}",
     "packages/*/*.config.{ts,mts}",
-    "packages/site/content/**/*.{ts,tsx}",
 ];
 
 export const DEFAULT_IGNORE : readonly string[] = [

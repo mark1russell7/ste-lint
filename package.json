@@ -1,29 +1,47 @@
 {
-  "name": "@lag/ste-lint",
-  "version": "0.0.0",
-  "private": true,
+  "$schema": "https://json.schemastore.org/package",
+  "name": "@mark1russell7/ste-lint",
+  "version": "0.1.0",
+  "description": "A linter for the writing rules of ASD-STE100 Simplified Technical English in Markdown, MDX and TypeScript doc comments",
   "type": "module",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "packageManager": "pnpm@12.10.1",
+  "engines": {
+    "node": ">=22"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
-    }
+    },
+    "./ste.config.schema.json": "./ste.config.schema.json"
   },
   "bin": {
     "ste-lint": "./dist/cli.js"
   },
+  "files": [
+    "dist",
+    "ste.config.schema.json"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mark1russell7/ste-lint.git"
+  },
   "scripts": {
     "build": "tsc -b",
+    "prepare": "tsc -b",
     "typecheck": "tsc -p tsconfig.test.json",
-    "test": "vitest run"
+    "test": "vitest run",
+    "lint:ste": "tsx src/cli.ts"
   },
   "dependencies": {
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.3"
   },
   "devDependencies": {
-    "@types/node": "^25.3.0",
-    "vitest": "^4.1.2"
+    "@mark1russell7/cue": "github:mark1russell7/cue",
+    "@types/node": "^26.6.4",
+    "tsx": "^4.23.15",
+    "vitest": "^5.0.3"
   }
 }

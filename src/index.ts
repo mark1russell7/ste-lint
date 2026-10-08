@@ -1,5 +1,5 @@
 /**
- * `@lag/ste-lint`: a linter for prose in Markdown, MDX and TypeScript doc
+ * `@mark1russell7/ste-lint`: a linter for prose in Markdown, MDX and TypeScript doc
  * comments. It is an automated approximation of the writing rules of
  * ASD-STE100 Simplified Technical English. It does not certify that a text
  * obeys the standard.

@@ -1,6 +1,6 @@
-# @lag/ste-lint
+# @mark1russell7/ste-lint
 
-`ste-lint` examines the English prose of a project. It finds text that does not obey the writing rules of ASD-STE100 Simplified Technical English (STE), Issue 9. The project uses STE as its style for the README files, the documentation website and the TSDoc comments.
+`ste-lint` examines the English prose of a project. It finds text that does not obey the writing rules of ASD-STE100 Simplified Technical English (STE), Issue 9. The projects that use it have STE as the style of their README files, their documentation and their TSDoc comments.
 
 > [!NOTE]
 > This tool is an automated approximation of the STE writing rules. It does not certify that a text obeys the standard. A text with no findings is not "STE compliant", and a person must examine the text too. This project is not affiliated with ASD, and ASD does not endorse this tool. "ASD-STE100" and "Simplified Technical English" are trademarks of ASD.
@@ -35,6 +35,31 @@ Headings and table cells are fragments. They get only the word rules, not the se
 | `missing-subject` | error | 4.2 | A doc comment sentence without a subject, for example `Returns the value.` |
 | `ing-verb` | warning | 3.5 | An `-ing` form that the text uses as a verb. |
 | `unknown-word` | warning | 1.1, 1.5, 1.12 | A word that is not in the local dictionary or the project glossary. This rule is active only with a dictionary. |
+
+## Installation
+
+The package is not on npm. Add it from GitHub as a development dependency of the root of the repository:
+
+```sh
+pnpm add -D github:mark1russell7/ste-lint
+```
+
+The install builds the package (`prepare`), and pnpm 11 and later starts that build only for an approved package. Approve the repository in `pnpm-workspace.yaml`. Then a new commit of `ste-lint` needs no new approval:
+
+```yaml
+allowBuilds:
+  "@mark1russell7/ste-lint@git+https://github.com/mark1russell7/ste-lint.git": true
+```
+
+Add a script to the root `package.json`, and put a `ste.config.json` at the root (refer to [Configuration](#configuration)):
+
+```json
+{
+  "scripts": {
+    "lint:ste": "ste-lint"
+  }
+}
+```
 
 ## Usage
 
@@ -96,7 +121,7 @@ The tool reads `ste.config.json` in the working directory or in a parent directo
 | `limits` | The numeric limits of the rules. |
 | `dictionaryPath` | The path of a local dictionary file. Refer to the dictionary section. |
 
-The file `ste.config.schema.json` in this package is a JSON schema for the configuration.
+The file `ste.config.schema.json` in this package is a JSON schema for the configuration. To use it, set `"$schema"` in `ste.config.json` to `./node_modules/@mark1russell7/ste-lint/ste.config.schema.json`.
 
 ## The project word list
 
@@ -186,3 +211,19 @@ The tool has no part-of-speech tagger. Each heuristic looks at the words near a 
 - A sentence can have a capital letter after an abbreviation or an initial. Then the sentence division can be incorrect.
 - The Markdown parser knows only the structure that the rules need. It is not a full CommonMark parser.
 - The tool examines only the rules in the table. It does not examine all 53 rules of the standard.
+
+## Development
+
+```sh
+pnpm install
+pnpm typecheck
+pnpm test
+pnpm build      # dist/
+pnpm lint:ste   # this README and the doc comments of src/
+```
+
+The package started as `@lag/ste-lint` in the [lag](https://github.com/mark1russell7/lag) repository. Its history came with it.
+
+## Disclosure
+
+An AI model (Claude, from Anthropic) wrote most of the text and the code of this repository, under the direction of the author. The tests and the STE linter examine them. The STEMG of ASD-STE100 asks for this disclosure in its white paper on STE and artificial intelligence (June 2026).
