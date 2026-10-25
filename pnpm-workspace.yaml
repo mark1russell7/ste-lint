@@ -1,5 +1,7 @@
 # Packages allowed to run install scripts. Since pnpm 11 every other package that has one fails the install.
-# A git-hosted package is approved by its repository URL, so a new commit of cue needs no new approval.
 allowBuilds:
-  "@mark1russell7/cue@git+https://github.com/mark1russell7/cue.git": true
   esbuild: true
+# pnpm 12 does not install a version that is younger than its minimum release age. cue 1.0.2 is new,
+# so pnpm added it here. Remove the entry when the version is old enough.
+minimumReleaseAgeExclude:
+  - '@mark1russell7/cue@1.0.2'
