@@ -106,6 +106,26 @@ describe("runCli", () => {
         expect(result.stdout).not.toContain("README.md");
     });
 
+    it("applies the ignore patterns of the configuration relative to its directory, also from a subdirectory", () => {
+        writeFileSync(join(root, "ste.config.json"), JSON.stringify({ include : ["docs/**/*.md"], ignore : ["docs/legacy/**"] }));
+        mkdirSync(join(root, "docs", "legacy"));
+        writeFileSync(join(root, "docs", "legacy", "old.md"), "You should stop.\n");
+        writeFileSync(join(root, "docs", "guide.md"), "You should stop.\n");
+        let stdout = "";
+        const code = runCli(["**/*.md"], { cwd : join(root, "docs"), env : {}, stdout : (text) => { stdout += text; }, stderr : () => {} });
+        expect(code).toBe(1);
+        expect(stdout).toContain("guide.md");
+        expect(stdout).not.toContain("old.md");
+    });
+
+    it("exits with 2 when it cannot read a directory", () => {
+        writeFileSync(join(root, "README.md"), "Text.\n");
+        // The walk reads README.md as a directory, and readdirSync fails with ENOTDIR
+        const result = run(["README.md/**/*.md"]);
+        expect(result.code).toBe(2);
+        expect(result.stderr).toMatch(/^ste-lint: cannot read the files: .*ENOTDIR/);
+    });
+
     it("exits with 2 when the patterns match no files, and with 0 when the default patterns match no files", () => {
         expect(run(["missing/*.md"])).toMatchObject({ code : 2, stderr : "ste-lint: no files match the patterns.\n" });
         expect(run([])).toMatchObject({ code : 0, stderr : "ste-lint: no files to examine.\n" });

@@ -53,7 +53,7 @@ export class Linter {
     lintText(text : string, path : string) : Finding[] {
         const extraction = extract(text, path);
         const lineIndex = new LineIndex(text);
-        type Raw = { ruleId : RuleId; severity : Severity; start : number; end : number; message : string };
+        type Raw = { ruleId : RuleId; severity : Severity; start : number; end : number; message : string; eachWord : boolean };
         const raw : Raw[] = [];
         for (const block of extraction.blocks) {
             const unit = buildUnit(block, this.lexicon);
@@ -72,13 +72,15 @@ export class Linter {
                             start : report.start,
                             end : report.end,
                             message : report.message,
+                            eachWord : reportsEachWord(rule),
                         });
                     },
                 });
             }
         }
-        // An unknown word that another rule reports already gets no second finding.
-        const others = raw.filter((finding) => finding.ruleId !== "unknown-word");
+        // An unknown word that another rule reports already gets no second finding. A finding for a
+        // sentence, a paragraph or a noun cluster does not report each word in it.
+        const others = raw.filter((finding) => finding.ruleId !== "unknown-word" && finding.eachWord);
         const kept = raw.filter((finding) => finding.ruleId !== "unknown-word"
             || !others.some((other) => other.start < finding.end && finding.start < other.end));
         return kept
@@ -104,6 +106,15 @@ export class Linter {
     lintFile(path : string, displayPath : string = path) : Finding[] {
         return this.lintText(readFileSync(path, "utf8"), displayPath);
     }
+}
+
+/**
+ * True when a finding of the rule is about each word in its range. A word rule reports a word or a
+ * phrase, for example a modal verb or a word list phrase. The noun-cluster rule reports a group of
+ * nouns, and the sentence and paragraph rules report a full sentence or paragraph.
+ */
+function reportsEachWord(rule : Rule) : boolean {
+    return rule.scope === "word" && rule.id !== "noun-cluster";
 }
 
 function extract(text : string, path : string) : Extraction {

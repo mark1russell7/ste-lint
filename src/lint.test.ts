@@ -61,6 +61,12 @@ describe("Linter", () => {
         expect(source.map((finding) => [finding.line, finding.column])).toEqual([[3, 8]]);
     });
 
+    it("gives correct positions after an HTML entity of a character outside the BMP", () => {
+        const text = "Text &#x1F600; then you should stop.";
+        const findings = lintText(text, "doc.md", config());
+        expect(findings.map((finding) => [finding.ruleId, finding.column, finding.endColumn])).toEqual([["modal-verb", text.indexOf("should") + 1, text.indexOf("should") + 7]]);
+    });
+
     it("gives no findings for a file kind that it cannot read", () => {
         expect(lintText("You should stop.", "a.json", config())).toEqual([]);
     });

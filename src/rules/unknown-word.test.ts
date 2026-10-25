@@ -59,4 +59,23 @@ describe("unknown-word", () => {
     it("does not add a finding to a word that another rule reports", () => {
         expect(found("Utilize it.")).toEqual([]);
     });
+
+    it("reports a word in a sentence, a paragraph or a noun cluster that a different rule reports", () => {
+        const all = (text : string, file : SteConfigFile = {}) => {
+            const config = resolveConfig(file, { root : "/" });
+            return new Linter(config, buildLexicon(config, dictionary)).lintText(text, "doc.md").map((finding) => finding.ruleId);
+        };
+        // A descriptive sentence with more than 25 words
+        const sentence = `The valve opens ${"the file and ".repeat(8)}the zorblat.`;
+        expect(all(sentence)).toContain("sentence-length");
+        expect(found(sentence)).toEqual(["zorblat"]);
+        // A paragraph with more than 6 sentences
+        const paragraph = `${"The valve opens the file. ".repeat(6)}The valve opens the zorblat.`;
+        expect(all(paragraph)).toContain("paragraph-length");
+        expect(found(paragraph)).toEqual(["zorblat"]);
+        // More than 3 nouns in sequence: "cache" and "buffer" are common nouns, but not in the dictionary
+        const cluster = "Open the valve file cache buffer.";
+        expect(all(cluster)).toContain("noun-cluster");
+        expect(found(cluster)).toEqual(["cache", "buffer"]);
+    });
 });
