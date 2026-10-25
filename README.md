@@ -70,14 +70,14 @@ The options:
 
 | Option | Function |
 | --- | --- |
-| `[patterns...]` | The glob patterns of the files to examine. Without patterns, the tool uses the `include` patterns of the configuration. |
+| `[patterns...]` | The glob patterns of the files to examine, relative to the working directory or absolute. Without patterns, the tool uses the `include` patterns of the configuration. The `ignore` patterns of the configuration stay relative to its directory. |
 | `--format text` | The default output: one group of findings for each file, a summary and the count of findings for each rule. |
 | `--format json` | The findings and the summary as JSON. |
 | `--max-warnings <n>` | Exit with code 1 when there are more than `n` warnings. |
 | `--config <path>` | Use this configuration file. |
 | `--help` | Show the help. |
 
-The exit code is 0 when there are no errors, and not more warnings than the maximum. The exit code is 1 when there are errors or too many warnings. The exit code is 2 for an incorrect command line or configuration, or when no file matches the patterns.
+The exit code is 0 when there are no errors, and not more warnings than the maximum. The exit code is 1 when there are errors or too many warnings. The exit code is 2 for an incorrect command line or configuration, or when no file matches the patterns. It is also 2 when the tool cannot read a file or a directory.
 
 The package also has the bin `ste-lint` (`dist/cli.js`) and a programmatic API. The `Linter` class examines text. The `runCli` function does the same work as the command line.
 

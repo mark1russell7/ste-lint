@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/package",
   "name": "@mark1russell7/ste-lint",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A linter for the writing rules of ASD-STE100 Simplified Technical English in Markdown, MDX and TypeScript doc comments",
   "type": "module",
   "packageManager": "pnpm@12.10.1",

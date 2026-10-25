@@ -71,11 +71,10 @@ class Builder {
         this.emit(this.raw[rawIndex]!, rawIndex);
     }
 
+    /** This method adds `text` to the clean text, with one offset for each UTF-16 unit, also for a character outside the BMP. */
     emit(text : string, rawIndex : number) : void {
-        for (const char of text) {
-            this.clean += char;
-            this.offsets.push(this.rawOffsets[rawIndex]!);
-        }
+        this.clean += text;
+        for (let k = 0; k < text.length; k++) this.offsets.push(this.rawOffsets[rawIndex]!);
     }
 
     placeholder(kind : PlaceholderKind, text : string, rawStart : number, rawEnd : number) : void {

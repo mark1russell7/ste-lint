@@ -135,9 +135,18 @@ export function runCli(argv, io) {
         throw error;
     }
     const explicit = options.patterns.length > 0;
-    const files = (explicit
-        ? findFiles({ root: io.cwd, include: options.patterns, ignore: config.ignore })
-        : findFiles({ root: config.root, include: config.include, ignore: config.ignore })).filter((file) => fileKind(file) !== null);
+    let files;
+    try {
+        // The patterns of the command line are relative to the working directory. The ignore patterns are relative to the configuration.
+        files = (explicit
+            ? findFiles({ root: io.cwd, include: options.patterns, ignore: config.ignore, ignoreRoot: config.root })
+            : findFiles({ root: config.root, include: config.include, ignore: config.ignore })).filter((file) => fileKind(file) !== null);
+    }
+    catch (error) {
+        // For example, a directory that the user cannot read (EACCES)
+        io.stderr(`ste-lint: cannot read the files: ${error.message}\n`);
+        return 2;
+    }
     if (files.length === 0) {
         io.stderr(explicit ? "ste-lint: no files match the patterns.\n" : "ste-lint: no files to examine.\n");
         return explicit ? 2 : 0;

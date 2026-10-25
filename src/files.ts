@@ -9,11 +9,11 @@
  * - `{a,b}` matches one of the alternatives
  * - `[abc]` or `[!abc]` matches one character of a set.
  *
- * Patterns use `/` on all platforms.
+ * Patterns use `/` on all platforms. An absolute pattern is also correct.
  */
 
 import { existsSync, readdirSync, statSync } from "node:fs";
-import { join, relative, resolve, sep } from "node:path";
+import { isAbsolute, join, relative, resolve, sep } from "node:path";
 
 const GLOB_CHARS = /[*?[\]{}]/;
 
@@ -128,14 +128,22 @@ function toPosix(path : string) : string {
     return path.split(sep).join("/");
 }
 
+/** The pattern with `/`, relative to `root`. An absolute pattern becomes relative to `root`, so that it can match a relative path. */
+function relativePattern(root : string, pattern : string) : string {
+    const normalized = pattern.replace(/\\/g, "/").replace(/^\.\//, "");
+    return isAbsolute(normalized) ? toPosix(relative(root, normalized)) : normalized;
+}
+
 /** Directories that the walk does not enter. */
 const SKIPPED_DIRECTORIES = new Set(["node_modules", ".git"]);
 
 export type FindOptions = {
-    /** The directory that the patterns are relative to. */
+    /** The directory that the include patterns are relative to. */
     readonly root : string;
     readonly include : readonly string[];
     readonly ignore : readonly string[];
+    /** The directory that the ignore patterns are relative to. The default is `root`. */
+    readonly ignoreRoot? : string;
 };
 
 /**
@@ -146,12 +154,16 @@ export type FindOptions = {
  */
 export function findFiles(options : FindOptions) : string[] {
     const root = resolve(options.root);
-    const ignore = options.ignore.map(globToRegExp);
-    const isIgnored = (relativePath : string) : boolean => ignore.some((pattern) => pattern.test(relativePath));
+    const ignoreRoot = resolve(options.ignoreRoot ?? root);
+    const ignore = options.ignore.map((pattern) => globToRegExp(relativePattern(ignoreRoot, pattern)));
+    const isIgnored = (path : string, suffix = "") : boolean => {
+        const relativePath = toPosix(relative(ignoreRoot, path)) + suffix;
+        return ignore.some((pattern) => pattern.test(relativePath));
+    };
     const found = new Set<string>();
 
     for (const pattern of options.include) {
-        const normalized = pattern.replace(/\\/g, "/").replace(/^\.\//, "");
+        const normalized = relativePattern(root, pattern);
         if (!isGlob(normalized)) {
             const path = resolve(root, normalized);
             if (existsSync(path) && statSync(path).isFile()) found.add(path);
@@ -166,9 +178,9 @@ export function findFiles(options : FindOptions) : string[] {
                 const relativePath = toPosix(relative(root, path));
                 if (entry.isDirectory()) {
                     // A pattern such as "**/dist/**" matches the files in a directory, so test the directory with a "/" after it.
-                    if (SKIPPED_DIRECTORIES.has(entry.name) || isIgnored(relativePath) || isIgnored(`${relativePath}/`)) continue;
+                    if (SKIPPED_DIRECTORIES.has(entry.name) || isIgnored(path) || isIgnored(path, "/")) continue;
                     walk(path);
-                } else if (entry.isFile() && matcher.test(relativePath) && !isIgnored(relativePath)) {
+                } else if (entry.isFile() && matcher.test(relativePath) && !isIgnored(path)) {
                     found.add(path);
                 }
             }

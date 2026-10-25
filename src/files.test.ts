@@ -86,4 +86,22 @@ describe("findFiles", () => {
     it("lints a named file even when an ignore pattern matches it, and skips a missing file or directory", () => {
         expect(find(["packages/a/src/index.test.ts", "missing.md", "docs", "nothing/**/*.md"])).toEqual(["packages/a/src/index.test.ts"]);
     });
+
+    it("accepts absolute glob patterns, also for the ignore patterns", () => {
+        const absolute = root.split(sep).join("/");
+        expect(find([`${absolute}/docs/**/*.{md,mdx}`])).toEqual(["docs/deep/page.mdx", "docs/guide.md"]);
+        expect(find([`${absolute}/packages/*/src/**/*.ts`], [`${absolute}/packages/**/*.test.ts`])).toEqual(["packages/a/src/index.ts"]);
+        // A pattern outside the root
+        const docs = join(root, "docs");
+        expect(findFiles({ root : docs, include : [`${absolute}/packages/b/**/*.tsx`], ignore : [] }).map((file) => relative(root, file).split(sep).join("/")))
+            .toEqual(["packages/b/src/view.tsx"]);
+    });
+
+    it("applies the ignore patterns relative to ignoreRoot", () => {
+        const packages = join(root, "packages");
+        const found = findFiles({ root : packages, include : ["**/*.ts"], ignore : ["packages/a/**"], ignoreRoot : root });
+        expect(found.map((file) => relative(root, file).split(sep).join("/"))).toEqual([]);
+        const all = findFiles({ root : packages, include : ["**/*.{ts,tsx}"], ignore : ["**/node_modules/**", "packages/a/**"], ignoreRoot : root });
+        expect(all.map((file) => relative(root, file).split(sep).join("/"))).toEqual(["packages/b/src/view.tsx"]);
+    });
 });

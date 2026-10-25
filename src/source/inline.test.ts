@@ -54,6 +54,14 @@ describe("normalizeInline", () => {
         expect(clean("A&nbsp;B &amp; C &#65; &#x42; &unknown; &constructor;")).toBe("A B & C A B &unknown; &constructor;");
     });
 
+    it("gives each UTF-16 unit of a decoded character outside the BMP an offset", () => {
+        const text = "A &#x1F600; and &#128512; b.";
+        const inline = normalizeInline(splitLines(text), markdown);
+        expect(inline.clean).toBe("A \u{1F600} and \u{1F600} b.");
+        expect(inline.offsets).toHaveLength(inline.clean.length);
+        expect(inline.offsets[inline.clean.indexOf("b")]).toBe(text.indexOf("b"));
+    });
+
     it("makes quoted text one placeholder and keeps a final period outside it", () => {
         expect(clean("The word \"should\" is a modal. He said “Stop.” Then left.")).toBe("The word [quote:should] is a modal. He said [quote:Stop.]. Then left.");
         expect(clean("Use 'single quotes' here, but it's fine.")).toBe("Use [quote:single quotes] here, but it's fine.");

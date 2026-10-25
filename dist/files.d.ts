@@ -9,7 +9,7 @@
  * - `{a,b}` matches one of the alternatives
  * - `[abc]` or `[!abc]` matches one character of a set.
  *
- * Patterns use `/` on all platforms.
+ * Patterns use `/` on all platforms. An absolute pattern is also correct.
  */
 /** True when `pattern` has glob characters. */
 export declare function isGlob(pattern: string): boolean;
@@ -18,10 +18,12 @@ export declare function globToRegExp(glob: string): RegExp;
 /** The part of a pattern before the first segment with glob characters. The walk starts in that directory. */
 export declare function globBase(glob: string): string;
 export type FindOptions = {
-    /** The directory that the patterns are relative to. */
+    /** The directory that the include patterns are relative to. */
     readonly root: string;
     readonly include: readonly string[];
     readonly ignore: readonly string[];
+    /** The directory that the ignore patterns are relative to. The default is `root`. */
+    readonly ignoreRoot?: string;
 };
 /**
  * This function finds the files that match the include patterns and no
