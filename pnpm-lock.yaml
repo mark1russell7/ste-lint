@@ -172,7 +172,7 @@ importers:
     devDependencies:
       '@mark1russell7/cue':
         specifier: ^1.0.2
-        version: 1.0.2
+        version: 1.1.0
       '@types/node':
         specifier: ^26.6.4
         version: 26.6.4
@@ -351,8 +351,8 @@ packages:
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
 
-  '@mark1russell7/cue@1.0.2':
-    resolution: {integrity: sha512-ketUJQeJ4eLSmw0X3NpWrGHxXVg30MpMfw/wYdzlpwf7J94BQmmOM80VuGL4OPC4tXczmTj5LWxNdM7NoQKgeA==}
+  '@mark1russell7/cue@1.1.0':
+    resolution: {integrity: sha512-R9pjuWNFqd/LSfOI8uY7w8E2Dri8UQFGLodBuV4d2E0pwzWM5ISVXWVhC7+aYgrR1GXSMzbyo5ZLWvqyQCwdIg==}
     engines: {node: '>=22'}
     hasBin: true
 
@@ -837,7 +837,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.6.0
 
-  '@mark1russell7/cue@1.0.2': {}
+  '@mark1russell7/cue@1.1.0': {}
 
   '@oxc-project/types@0.153.0': {}
 
