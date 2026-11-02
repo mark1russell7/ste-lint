@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ste-lint: a linter for Simplified Technical English, live</title>
+    <meta name="description" content="Type English text and see the problems against the writing rules of ASD-STE100 Simplified Technical English, in your browser. Explore each rule and each entry of the word list." />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23202a44'/%3E%3Crect x='6' y='8' width='20' height='3' rx='1.5' fill='%23fffdf8'/%3E%3Crect x='6' y='15' width='13' height='3' rx='1.5' fill='%23fffdf8'/%3E%3Cpath d='M6 24q2-2.5 4 0t4 0 4 0 4 0' fill='none' stroke='%23e0533d' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+    <script>
+      // The saved theme applies before the first paint, so a dark page does not flash white.
+      try {
+        const t = localStorage.getItem("ste-lint-theme");
+        if (t === "light" || t === "dark") document.documentElement.dataset.theme = t;
+      } catch {}
+    </script>
+  </head>
+  <body>
+    <a class="skip" href="#editor">Skip to the editor</a>
+    <header class="top">
+      <div class="brand">
+        <h1 class="wordmark"><span class="mark" aria-hidden="true"></span>ste-lint</h1>
+        <p class="lead">
+          A linter for the writing rules of ASD-STE100 Simplified Technical English. Type in the box: the linter examines the text in your
+          browser at each change.
+        </p>
+      </div>
+      <nav class="links" id="links" aria-label="Site">
+        <a href="#playground" aria-current="page">Playground</a>
+        <a href="#rules">Rules</a>
+        <a href="#why">Why STE</a>
+        <a href="#install">Install</a>
+        <a href="releases/">Releases</a>
+        <a href="status/">Status</a>
+        <a href="https://github.com/mark1russell7/ste-lint">Source on GitHub</a>
+        <button type="button" class="theme" id="theme" aria-label="Color theme">Theme: auto</button>
+      </nav>
+    </header>
+
+    <main class="app">
+      <section id="playground" class="playground" aria-labelledby="playground-title">
+        <h2 id="playground-title" class="sr">Playground</h2>
+        <div class="card editor-card">
+          <div class="toolbar">
+            <div class="field">
+              <span class="label" id="mode-label">Text</span>
+              <div class="seg" role="radiogroup" aria-labelledby="mode-label" id="modes"></div>
+            </div>
+            <div class="field">
+              <label class="label" for="sample">Sample</label>
+              <select id="sample"></select>
+            </div>
+            <div class="tools">
+              <button type="button" id="share" title="Copy a link to this text">Copy link</button>
+              <button type="button" id="clear">Clear</button>
+            </div>
+          </div>
+          <div class="editor" id="editor-wrap">
+            <div class="backdrop" id="backdrop" aria-hidden="true"></div>
+            <textarea id="editor" spellcheck="false" autocapitalize="off" autocomplete="off" aria-label="Text to examine" aria-describedby="status"></textarea>
+          </div>
+          <p class="status" id="status" role="status" aria-live="polite"></p>
+          <div class="caret-note" id="caret-note" hidden></div>
+          <details class="settings" id="settings">
+            <summary>Settings: limits, glossary and dictionary</summary>
+            <div class="settings-grid">
+              <label class="num">Words in an instruction <input type="number" id="lim-instructionWords" min="1" max="99" inputmode="numeric" /></label>
+              <label class="num">Words in a description <input type="number" id="lim-descriptionWords" min="1" max="99" inputmode="numeric" /></label>
+              <label class="num">Sentences in a paragraph <input type="number" id="lim-paragraphSentences" min="1" max="99" inputmode="numeric" /></label>
+              <label class="num">Nouns in a cluster <input type="number" id="lim-nounClusterNouns" min="1" max="99" inputmode="numeric" /></label>
+              <label class="wide">Technical nouns <span class="hint">One term on each line or between commas</span><textarea id="g-technicalNouns" rows="2"></textarea></label>
+              <label class="wide">Technical verbs <textarea id="g-technicalVerbs" rows="2"></textarea></label>
+              <label class="wide">Proper nouns <textarea id="g-properNouns" rows="2"></textarea></label>
+              <div class="wide dict">
+                <span class="label">Dictionary</span>
+                <p class="hint">The rule <code>unknown-word</code> needs a dictionary of approved words. Load your own JSON file. It stays in this browser.</p>
+                <div class="row">
+                  <label class="file-btn"><input type="file" id="dict-file" accept=".json,application/json" /> Load a file</label>
+                  <button type="button" id="dict-clear" hidden>Remove the dictionary</button>
+                </div>
+                <p class="hint" id="dict-status">No dictionary.</p>
+              </div>
+              <div class="wide">
+                <span class="label">ste.config.json for these settings</span>
+                <pre class="config" id="config-out"></pre>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <aside class="card findings-card" aria-labelledby="findings-title">
+          <div class="findings-head">
+            <h2 id="findings-title">Findings</h2>
+            <div class="totals" id="totals"></div>
+          </div>
+          <div id="tally" class="tally"></div>
+          <ol class="findings" id="findings"></ol>
+        </aside>
+      </section>
+
+      <section id="rules" class="section" aria-labelledby="rules-title">
+        <div class="section-head">
+          <h2 id="rules-title">Rules and word list</h2>
+          <p class="hint" id="rules-count"></p>
+        </div>
+        <div class="card filters">
+          <label class="search">
+            <span class="sr">Search the rules and the word list</span>
+            <input type="search" id="rule-search" placeholder="Search: a word, a rule or an STE rule number" autocomplete="off" />
+          </label>
+          <div class="seg" role="radiogroup" aria-label="Kind" id="kind-filter"></div>
+          <div class="seg" role="radiogroup" aria-label="Severity" id="severity-filter"></div>
+        </div>
+        <div id="catalog" class="catalog"></div>
+      </section>
+
+      <section class="section two" aria-label="About">
+        <article id="why" class="card prose" aria-labelledby="why-title"></article>
+        <article id="install" class="card prose" aria-labelledby="install-title"></article>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <p>
+        MIT license. <a href="https://github.com/mark1russell7/ste-lint">github.com/mark1russell7/ste-lint</a> · <span id="build"></span>
+      </p>
+      <p class="fine">
+        This tool is an automated approximation of the STE writing rules. It does not certify that a text obeys the standard. This project is not
+        affiliated with ASD, and ASD does not endorse this tool. "ASD-STE100" and "Simplified Technical English" are trademarks of ASD.
+      </p>
+    </footer>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

@@ -2,6 +2,8 @@
 
 `ste-lint` examines the English prose of a project. It finds text that does not obey the writing rules of ASD-STE100 Simplified Technical English (STE), Issue 9. The projects that use it have STE as the style of their README files, their documentation and their TSDoc comments.
 
+Try the linter in your browser at [mark1russell7.github.io/ste-lint](https://mark1russell7.github.io/ste-lint/). Type text, and the page shows each finding. It also has a list of all rules and all entries of the word list, each with a bad and a good example.
+
 > [!NOTE]
 > This tool is an automated approximation of the STE writing rules. It does not certify that a text obeys the standard. A text with no findings is not "STE compliant", and a person must examine the text too. This project is not affiliated with ASD, and ASD does not endorse this tool. "ASD-STE100" and "Simplified Technical English" are trademarks of ASD.
 
@@ -38,13 +40,13 @@ Headings and table cells are fragments. They get only the word rules, not the se
 
 ## Installation
 
-The package is not on npm. Add it from GitHub as a development dependency of the root of the repository:
+Add the package from npm as a development dependency of the root of the repository:
 
 ```sh
-pnpm add -D github:mark1russell7/ste-lint
+pnpm add -D @mark1russell7/ste-lint
 ```
 
-The repository contains the built code in `dist/`, thus the install builds nothing and needs no approval in `pnpm-workspace.yaml`.
+A GitHub specifier (`github:mark1russell7/ste-lint`) also operates. The repository contains the built code in `dist/`, thus the install builds nothing and needs no approval in `pnpm-workspace.yaml`.
 
 Add a script to the root `package.json`, and put a `ste.config.json` at the root (refer to [Configuration](#configuration)):
 
@@ -79,7 +81,23 @@ The options:
 
 The exit code is 0 when there are no errors, and not more warnings than the maximum. The exit code is 1 when there are errors or too many warnings. The exit code is 2 for an incorrect command line or configuration, or when no file matches the patterns. It is also 2 when the tool cannot read a file or a directory.
 
-The package also has the bin `ste-lint` (`dist/cli.js`) and a programmatic API. The `Linter` class examines text. The `runCli` function does the same work as the command line.
+The package also has the bin `ste-lint` (`dist/cli.js`) and a programmatic API. The `Linter` class examines text and files. The `runCli` function does the same work as the command line.
+
+The package has three entries:
+
+| Entry | Contents |
+| --- | --- |
+| `@mark1russell7/ste-lint` | All of the API: the `Linter` class, `runCli`, `resolveConfig`, `loadDictionary` and the items of the two entries below. |
+| `@mark1russell7/ste-lint/core` | The rules with no file system and no TypeScript compiler, for a browser: `ProseLinter`, `baseConfig`, `parseDictionary`, `buildLexicon`, `RULES` and the word list. |
+| `@mark1russell7/ste-lint/code` | `extractCode`, which finds the doc comments and the JSX text of TypeScript code. Give it to `ProseLinter` as the option `extractCode`. It loads the TypeScript compiler. |
+
+```ts
+import { baseConfig, ProseLinter } from "@mark1russell7/ste-lint/core";
+import { extractCode } from "@mark1russell7/ste-lint/code";
+
+const linter = new ProseLinter(baseConfig({ technicalNouns: ["memory usage"] }), undefined, { extractCode });
+const findings = linter.lintText("/** Gives the count. */\nexport const count = 1;\n", "count.ts");
+```
 
 ## Configuration
 
@@ -214,8 +232,11 @@ pnpm install
 pnpm typecheck
 pnpm test
 pnpm build      # dist/
-pnpm lint:ste   # this README and the doc comments of src/
+pnpm lint:ste   # this README, the doc comments of src/ and the text of the site
+pnpm --filter @ste-lint/site run dev   # the site, at http://localhost:5173/
 ```
+
+The site is in `site/`. It uses the entries `./core` and `./code` from the workspace, so it has the same rules as the command line. Its tests compare the findings of the page with the findings of the `Linter` class.
 
 After a change to `src/`, start `pnpm build` and commit `dist/` too. CI fails when `dist/` does not agree with `src/`.
 

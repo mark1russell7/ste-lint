@@ -1,6 +1,8 @@
 node_modules/
 # dist/ is committed: a git dependency then needs no build at install. CI checks that it agrees with src/.
 *.tsbuildinfo
+# The build of the site. The Pages workflow makes it.
+site/dist/
 coverage/
 
 # Local dictionaries. The ASD-STE100 dictionary is copyrighted: do not commit it.

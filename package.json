@@ -15,6 +15,14 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
+    "./core": {
+      "types": "./dist/core.d.ts",
+      "import": "./dist/core.js"
+    },
+    "./code": {
+      "types": "./dist/source/code.d.ts",
+      "import": "./dist/source/code.js"
+    },
     "./ste.config.schema.json": "./ste.config.schema.json"
   },
   "bin": {
@@ -34,7 +42,7 @@
   },
   "scripts": {
     "build": "tsc -b",
-    "typecheck": "tsc -p tsconfig.test.json",
+    "typecheck": "tsc -p tsconfig.test.json && pnpm --filter @ste-lint/site run typecheck",
     "test": "vitest run",
     "lint:ste": "tsx src/cli.ts"
   },

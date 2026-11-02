@@ -6,6 +6,7 @@
  */
 
 export {
+    baseConfig,
     CONFIG_FILE_NAME,
     ConfigError,
     DEFAULT_IGNORE,
@@ -17,6 +18,7 @@ export {
     mergeWordList,
     resolveConfig,
     validateConfig,
+    type BaseConfigOptions,
     type Limits,
     type LimitsConfig,
     type ResolvedConfig,
@@ -27,7 +29,9 @@ export { Dictionary, DICTIONARY_FORMAT, DictionaryError, loadDictionary, parseDi
 export { findFiles, globToRegExp } from "./files.js";
 export { formatJson, formatText, summarize, type RuleCount, type Summary } from "./format.js";
 export { buildLexicon, type Lexicon } from "./lexicon.js";
+export { ProseLinter, type CodeExtractor, type ProseLinterOptions } from "./engine.js";
 export { fileKind, Linter, lintText, type FileKind } from "./lint.js";
+export { extractCode } from "./source/code.js";
 export { getRule, RULES, type Rule } from "./rules/index.js";
 export { parseArgs, runCli, USAGE, type CliIo, type CliOptions } from "./run-cli.js";
 export { isRuleId, RULE_IDS, type Finding, type RuleId, type RuleSetting, type Severity } from "./types.js";

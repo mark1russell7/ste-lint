@@ -2,7 +2,9 @@
   "$schema": "./ste.config.schema.json",
   "include": [
     "README.md",
-    "src/**/*.ts"
+    "src/**/*.ts",
+    "site/content/*.md",
+    "site/src/**/*.ts"
   ],
   "ignore": [
     "**/node_modules/**",
