@@ -2,6 +2,7 @@
   "$schema": "./ste.config.schema.json",
   "include": [
     "README.md",
+    "docs/*.md",
     "src/**/*.ts",
     "site/content/*.md",
     "site/src/**/*.ts"

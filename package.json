@@ -3,6 +3,7 @@
   "name": "@mark1russell7/ste-lint",
   "version": "0.1.2",
   "description": "A linter for the writing rules of ASD-STE100 Simplified Technical English in Markdown, MDX and TypeScript doc comments",
+  "license": "MIT",
   "type": "module",
   "packageManager": "pnpm@12.10.1",
   "engines": {
@@ -44,15 +45,31 @@
     "build": "tsc -b",
     "typecheck": "tsc -p tsconfig.test.json && pnpm --filter @ste-lint/site run typecheck",
     "test": "vitest run",
-    "lint:ste": "tsx src/cli.ts"
+    "lint:ste": "tsx src/cli.ts",
+    "check:conventions": "conventions check"
   },
   "dependencies": {
     "typescript": "^6.0.3"
   },
   "devDependencies": {
+    "@mark1russell7/conventions": "^0.22.0",
     "@mark1russell7/cue": "^1.0.2",
     "@types/node": "^26.6.4",
     "tsx": "^4.23.15",
     "vitest": "^5.0.3"
+  },
+  "conventions": {
+    "rules": {
+      "no-build-output": {
+        "off": "Git keeps dist/, because other repositories install this package from git, and a git dependency needs no build at install. CI checks that dist/ agrees with src/."
+      },
+      "typed-scripts": {
+        "ignore": [
+          "dist/**",
+          "site/check-probe.js"
+        ],
+        "reason": "dist/ is the build output of src/, which is TypeScript. site/check-probe.js uses the global helpers of the site check of site-pages, and this repository has no type declarations for them yet."
+      }
+    }
   }
 }
