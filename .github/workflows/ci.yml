@@ -34,3 +34,5 @@ jobs:
         run: git diff --exit-code --stat -- dist && test -z "$(git status --porcelain -- dist)"
       # The writing rules (ASD-STE100) of the README and the doc comments
       - run: pnpm lint:ste
+      # The site bundles the core of the package. A change that breaks the bundle stops the pull request, not the deploy.
+      - run: pnpm --filter @ste-lint/site run build
