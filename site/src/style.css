@@ -274,11 +274,25 @@ button.primary {
     grid-template-columns: minmax(0, 1.55fr) minmax(320px, 1fr);
   }
 
+  /* The head and the tally stay in place. Only the list of findings scrolls. */
   .findings-card {
     position: sticky;
     top: 12px;
     max-height: min(calc(100vh - 24px), 960px);
-    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .findings-card > .findings {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    /* Room for the focus rings and the shadows of the items */
+    margin-inline: -4px;
+    padding: 4px 4px 8px;
+    border-top: 1px solid var(--rule);
   }
 }
 
@@ -313,20 +327,90 @@ button.primary {
 .editor-card {
   padding: 14px 16px 16px;
   min-width: 0;
+  container-type: inline-size;
 }
 
+/* A narrow card: the modes on one line, the sample label with the tools at its side, then the
+   sample select at the full width. A wide card: the three in one row. The width of the card
+   decides, not the width of the window. */
 .toolbar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  gap: 12px 20px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    "mode mode"
+    "slabel tools"
+    "select select";
+  align-items: end;
+  gap: 8px 12px;
   margin-bottom: 12px;
 }
 
+.toolbar .mode-field {
+  grid-area: mode;
+  min-width: 0;
+  margin-bottom: 4px;
+}
+
+/* The label and the select of the sample go into the cells of the toolbar. */
+.toolbar .sample-field {
+  display: contents;
+}
+
+.toolbar .sample-field .label {
+  grid-area: slabel;
+  margin-bottom: 0;
+  align-self: end;
+}
+
+.toolbar .sample-field select {
+  grid-area: select;
+  width: 100%;
+  min-width: 0;
+}
+
 .toolbar .tools {
+  grid-area: tools;
   display: flex;
   gap: 8px;
-  margin-left: auto;
+}
+
+.toolbar .tools button {
+  white-space: nowrap;
+}
+
+.toolbar .seg {
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.toolbar .seg button {
+  flex: 1 1 auto;
+  padding-inline: 8px;
+  white-space: nowrap;
+}
+
+@container (min-width: 660px) {
+  .toolbar {
+    grid-template-columns: max-content minmax(8rem, 16rem) max-content;
+    grid-template-areas:
+      "mode slabel tools"
+      "mode select tools";
+    justify-content: space-between;
+    row-gap: 6px;
+  }
+
+  .toolbar .mode-field {
+    margin-bottom: 0;
+  }
+
+  .toolbar .seg {
+    display: inline-flex;
+  }
+
+  .toolbar .seg button {
+    flex: 0 0 auto;
+    padding-inline: 12px;
+  }
 }
 
 .editor {
@@ -828,10 +912,16 @@ button.primary {
   margin-top: 4px;
 }
 
+/* Columns, not a grid: each card keeps its own height, so a short card does not stretch to the
+   tallest card of its row. */
 .rule-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
-  gap: 12px;
+  columns: 340px;
+  column-gap: 12px;
+}
+
+.rule-grid > .rule-card {
+  break-inside: avoid;
+  margin-bottom: 12px;
 }
 
 .rule-card {
