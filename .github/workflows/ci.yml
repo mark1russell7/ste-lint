@@ -11,7 +11,7 @@ permissions:
 
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   ci:
@@ -19,6 +19,9 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
+        with:
+          # The whole history, so that check:conventions reads each commit of a pull request
+          fetch-depth: 0
       # The pnpm version comes from "packageManager" in package.json
       - uses: pnpm/action-setup@v6
       - uses: actions/setup-node@v7
@@ -27,6 +30,8 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm typecheck
+      # The conventions of the repositories of mark1russell7 (@mark1russell7/conventions)
+      - run: pnpm check:conventions
       - run: pnpm test
       - run: pnpm build
       # dist/ is committed, so that a git dependency needs no build at install

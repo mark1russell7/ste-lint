@@ -170,6 +170,9 @@ importers:
         specifier: ^6.0.3
         version: 6.0.3
     devDependencies:
+      '@mark1russell7/conventions':
+        specifier: ^0.22.0
+        version: 0.22.0
       '@mark1russell7/cue':
         specifier: ^1.0.2
         version: 1.1.0
@@ -375,6 +378,11 @@ packages:
 
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
+
+  '@mark1russell7/conventions@0.22.0':
+    resolution: {integrity: sha512-MtNaOnUyG9trSTY0S9In5+JtGwNpYHRGYxvDgncGtn50VBE75fJ7aSFNOxZDcDY4F0+AoG2pOJbnQd+bSSX13Q==}
+    engines: {node: '>=22'}
+    hasBin: true
 
   '@mark1russell7/cue@1.1.0':
     resolution: {integrity: sha512-R9pjuWNFqd/LSfOI8uY7w8E2Dri8UQFGLodBuV4d2E0pwzWM5ISVXWVhC7+aYgrR1GXSMzbyo5ZLWvqyQCwdIg==}
@@ -866,6 +874,8 @@ snapshots:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.6.0
+
+  '@mark1russell7/conventions@0.22.0': {}
 
   '@mark1russell7/cue@1.1.0': {}
 
