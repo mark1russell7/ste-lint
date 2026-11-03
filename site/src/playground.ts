@@ -94,6 +94,9 @@ export class Playground {
       void copyText(share, url.href, "Link copied");
     });
     new ResizeObserver(() => this.fit()).observe(this.editor);
+    // The web font loads after the first fit and changes the line breaks, so the text area fits its text again.
+    void document.fonts.ready.then(() => this.fit());
+    document.fonts.addEventListener("loadingdone", () => this.fit());
   }
 
   /** This function puts a text in the editor and examines it at once. */
