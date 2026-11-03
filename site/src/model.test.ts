@@ -17,6 +17,7 @@ import {
   suggestionsFromMessage,
   tallyByRule,
   toOffset,
+  typographic,
   viewFindings,
 } from "./model.ts";
 import { SAMPLES } from "./samples.ts";
@@ -122,5 +123,16 @@ describe("the model of the findings", () => {
     expect(moved.map((f) => `Now ${before}`.slice(f.start, f.end))).toEqual(["should", "utilize", ";"]);
     const touched = shiftFindings(before, "You should use it; ok.", view);
     expect(touched.map((f) => "You should use it; ok.".slice(f.start, f.end))).toEqual(["should", ";"]);
+  });
+});
+
+describe("typographic", () => {
+  it("changes each pair of straight quotes to an opening and a closing quote", () => {
+    expect(typographic(`Write "use", not "utilize".`)).toBe("Write “use”, not “utilize”.");
+    expect(typographic(`Do not use the modal verb "should". Write "must" for an obligation.`)).toBe("Do not use the modal verb “should”. Write “must” for an obligation.");
+  });
+  it("keeps a text with no pair of quotes", () => {
+    expect(typographic("No quotes here.")).toBe("No quotes here.");
+    expect(typographic(`One " quote`)).toBe(`One " quote`);
   });
 });

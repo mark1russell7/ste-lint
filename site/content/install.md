@@ -26,7 +26,7 @@ A file `ste.config.json` at the root sets the files, the glossary, the rules and
 
 ### In a browser
 
-The entry `@mark1russell7/ste-lint/core` has the same rules, with no file system. This playground uses it. The entry is new after version 0.1.1.
+The entry `@mark1russell7/ste-lint/core` has the same rules, with no file system. This playground uses it. The entry is new in version 0.1.2.
 
 ```ts
 import { baseConfig, ProseLinter } from "@mark1russell7/ste-lint/core";

@@ -4,7 +4,7 @@ import { buildCatalog, filterCatalog, NO_FILTER, type CatalogFilter, type Catalo
 import { byId, h, Segmented } from "./chrome.ts";
 import type { Example } from "./examples.ts";
 import { lintExample } from "./lint.ts";
-import { segments, SPAN_RULES, viewFindings } from "./model.ts";
+import { segments, SPAN_RULES, typographic, viewFindings } from "./model.ts";
 import type { LoadRequest } from "./playground.ts";
 
 /** The ID of the element of an item, for the links of the page. */
@@ -127,7 +127,7 @@ export class Explorer {
         h("span", { class: `badge ${item.severity}` }, item.severity),
         h("span", { class: "ste" }, `STE ${item.ste}`),
       ),
-      h("p", { class: "desc" }, item.description),
+      h("p", { class: "desc" }, typographic(item.description)),
       item.ruleId === "unknown-word" && h("p", { class: "hint" }, "This rule needs a dictionary. The example uses a small list of made-up words."),
       this.examples(item),
       this.tryButton(item),
@@ -143,7 +143,7 @@ export class Explorer {
       h(
         "span",
         { class: "write" },
-        item.suggest === null ? "Remove the word." : `Write ${item.suggest}.`,
+        item.suggest === null ? "Remove the word." : typographic(`Write ${item.suggest}.`),
         entry?.note !== undefined && h("span", { class: "note" }, entry.note),
       ),
       this.examples(item),

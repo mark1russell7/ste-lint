@@ -8,6 +8,8 @@ name: Pages
 on:
   push:
     branches: [main]
+  # A pull request builds the site and runs the site check, with no deploy.
+  pull_request:
   # One build each day, so the Status page shows the open pull requests and issues of the day
   schedule:
     - cron: "28 6 * * *"
@@ -16,8 +18,9 @@ on:
 permissions: {}
 
 # One deployment at a time. A newer push cancels a deployment that waits.
+# Each pull request has its own group, so it does not cancel a deployment.
 concurrency:
-  group: pages
+  group: pages-${{ github.event_name == 'pull_request' && github.ref || 'deploy' }}
   cancel-in-progress: true
 
 jobs:
@@ -45,11 +48,18 @@ jobs:
       site-pages: true
       packages: "@mark1russell7/ste-lint"
       site-name: ste-lint
+      # The site check: a browser opens each page at 360, 400 and 1280 px, in light and dark, before the deploy.
+      # The probe types in the playground and reads the findings. A failure stops the deploy.
+      site-check: true
+      site-check-pages: /,/releases/,/status/
+      site-check-probe: site/check-probe.js
+      deploy: ${{ github.event_name != 'pull_request' }}
 
   # This job examines the deployed site: the home page and the pages of site-pages.
   # It starts no code of the repository and reads only the public site.
   served:
     needs: pages
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions: {}

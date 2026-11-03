@@ -13,6 +13,7 @@ import {
   shiftFindings,
   SPAN_RULES,
   tallyByRule,
+  typographic,
   viewFindings,
   type Mode,
   type ViewFinding,
@@ -364,7 +365,7 @@ export class Playground {
         h("span", {}, `line ${f.line}, column ${f.column}`),
       ),
       f.excerpt.trim() !== "" && h("span", { class: "excerpt" }, f.excerpt.length > 90 ? `${f.excerpt.slice(0, 90)}…` : f.excerpt),
-      h("span", { class: "msg" }, f.message),
+      h("span", { class: "msg" }, typographic(f.message)),
     );
     jump.addEventListener("click", () => this.select(f));
     const fixes = h("div", { class: "fixes" });
@@ -372,7 +373,7 @@ export class Playground {
       fixes.append(h("span", { class: "label" }, "Write"), ...f.suggestions.map((s) => h("span", { class: "suggest" }, s)));
     }
     for (const fix of f.fixes) {
-      const button = h("button", { type: "button" }, fix.label);
+      const button = h("button", { type: "button" }, typographic(fix.label));
       button.addEventListener("click", () => {
         const next = applyFix(this.editor.value, f, fix);
         this.editor.value = next.text;
@@ -419,7 +420,7 @@ export class Playground {
       this.caretNote.hidden = true;
       return;
     }
-    this.caretNote.replaceChildren(...shown.map((f) => h("p", {}, h("strong", {}, `${f.ruleId}: `), f.message)));
+    this.caretNote.replaceChildren(...shown.map((f) => h("p", {}, h("strong", {}, `${f.ruleId}: `), typographic(f.message))));
     this.caretNote.hidden = false;
     const id = shown[0]!.id;
     if (this.active !== id) {

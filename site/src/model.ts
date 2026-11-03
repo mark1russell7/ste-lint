@@ -51,6 +51,14 @@ export function quoted(text: string): string[] {
   return [...text.matchAll(/"([^"]+)"/g)].map((m) => m[1]!);
 }
 
+/**
+ * This function changes each pair of straight double quotes to an opening and a closing quote, for the display.
+ * The fonts of the site draw a straight quote at a slant, so `"use"` looked like `”use”`. The messages of the linter keep straight quotes.
+ */
+export function typographic(text: string): string {
+  return text.replace(/"([^"\n]*)"/g, "“$1”");
+}
+
 const normalize = (text: string): string => text.toLowerCase().replace(/\s+/g, " ").trim();
 
 /** The word list entry that has the text as one of its words or phrases, or null. */
