@@ -7,6 +7,9 @@ const rules = () => findings().map((li) => li.querySelector(".rule-id")?.textCon
 
 check("the sample text gives findings", await until(() => findings().length > 0), `${findings().length} findings`);
 
+const labels = $$("#findings li.finding .fixes button").map((button) => button.textContent ?? "");
+check("the fix buttons show no straight quotes", labels.length > 0 && labels.every((label) => !label.includes('"')), labels.slice(0, 3).join(", "));
+
 type("#editor", "You should restart the server.");
 check("a new text gives the modal-verb finding", await until(() => rules().includes("modal-verb")), rules().join(", "));
 

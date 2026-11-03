@@ -373,7 +373,7 @@ export class Playground {
       fixes.append(h("span", { class: "label" }, "Write"), ...f.suggestions.map((s) => h("span", { class: "suggest" }, s)));
     }
     for (const fix of f.fixes) {
-      const button = h("button", { type: "button" }, fix.label);
+      const button = h("button", { type: "button" }, typographic(fix.label));
       button.addEventListener("click", () => {
         const next = applyFix(this.editor.value, f, fix);
         this.editor.value = next.text;
