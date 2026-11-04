@@ -26,11 +26,11 @@ export function fileKind(path) {
  * and the word list matcher one time. It reads no file.
  */
 export class ProseLinter {
-    config;
     lexicon;
     wordList;
     rules;
     extractCode;
+    config;
     constructor(config, lexicon, options = {}) {
         this.config = config;
         this.lexicon = lexicon ?? buildLexicon(config);

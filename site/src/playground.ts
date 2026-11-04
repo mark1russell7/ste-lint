@@ -74,8 +74,10 @@ export class Playground {
   private lastMs = 0;
   /** On a narrow screen the list shows the first findings only, until the user asks for all. */
   private expanded = false;
+  private readonly events: PlaygroundEvents;
 
-  constructor(private readonly events: PlaygroundEvents) {
+  constructor(events: PlaygroundEvents) {
+    this.events = events;
     this.modes = new Segmented(
       byId("modes"),
       MODES.map((m) => ({ value: m, label: MODE_LABEL[m] })),

@@ -64,8 +64,13 @@ class Builder {
     clean = "";
     readonly offsets : number[] = [];
     readonly placeholders = new Map<number, Placeholder>();
+    private readonly raw : string;
+    private readonly rawOffsets : readonly number[];
 
-    constructor(private readonly raw : string, private readonly rawOffsets : readonly number[]) {}
+    constructor(raw : string, rawOffsets : readonly number[]) {
+        this.raw = raw;
+        this.rawOffsets = rawOffsets;
+    }
 
     char(rawIndex : number) : void {
         this.emit(this.raw[rawIndex]!, rawIndex);
