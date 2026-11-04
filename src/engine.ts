@@ -49,8 +49,10 @@ export class ProseLinter {
     private readonly wordList : WordListMatcher;
     private readonly rules : ReadonlyArray<{ readonly rule : Rule; readonly override : Severity | null }>;
     private readonly extractCode : CodeExtractor | null;
+    readonly config : ResolvedConfig;
 
-    constructor(readonly config : ResolvedConfig, lexicon? : Lexicon, options : ProseLinterOptions = {}) {
+    constructor(config : ResolvedConfig, lexicon? : Lexicon, options : ProseLinterOptions = {}) {
+        this.config = config;
         this.lexicon = lexicon ?? buildLexicon(config);
         this.wordList = new WordListMatcher(config.wordList);
         this.extractCode = options.extractCode ?? null;

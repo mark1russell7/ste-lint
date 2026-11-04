@@ -25,8 +25,10 @@ export class Explorer {
   private timer = 0;
   /** With no filter, the word list shows its first rows only, until the user asks for all. */
   private allWords = false;
+  private readonly onTry: (request: LoadRequest) => void;
 
-  constructor(private readonly onTry: (request: LoadRequest) => void) {
+  constructor(onTry: (request: LoadRequest) => void) {
+    this.onTry = onTry;
     this.kind = new Segmented(
       byId("kind-filter"),
       [
