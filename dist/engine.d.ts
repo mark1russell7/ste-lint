@@ -29,11 +29,11 @@ export type ProseLinterOptions = {
  * and the word list matcher one time. It reads no file.
  */
 export declare class ProseLinter {
-    readonly config: ResolvedConfig;
     readonly lexicon: Lexicon;
     private readonly wordList;
     private readonly rules;
     private readonly extractCode;
+    readonly config: ResolvedConfig;
     constructor(config: ResolvedConfig, lexicon?: Lexicon, options?: ProseLinterOptions);
     /** The prose units of a file. */
     units(text: string, path: string): ProseUnit[];

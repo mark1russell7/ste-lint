@@ -29,11 +29,11 @@ const CODE_ELEMENTS = new Set(["code", "kbd", "samp", "var", "tt"]);
 const ASCII_PUNCTUATION = /[!-/:-@[-`{-~]/;
 const ALPHANUMERIC = /[\p{L}\p{N}]/u;
 class Builder {
-    raw;
-    rawOffsets;
     clean = "";
     offsets = [];
     placeholders = new Map();
+    raw;
+    rawOffsets;
     constructor(raw, rawOffsets) {
         this.raw = raw;
         this.rawOffsets = rawOffsets;
