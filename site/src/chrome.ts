@@ -66,13 +66,14 @@ export interface Choice<T extends string> {
 /** A segmented control: a group of radio buttons. The arrow keys move the choice, as in a radio group. */
 export class Segmented<T extends string> {
   private readonly buttons: HTMLButtonElement[];
+  private readonly choices: readonly Choice<T>[];
+  private current: T;
+  private readonly onChange: (value: T) => void;
 
-  constructor(
-    container: HTMLElement,
-    private readonly choices: readonly Choice<T>[],
-    private current: T,
-    private readonly onChange: (value: T) => void,
-  ) {
+  constructor(container: HTMLElement, choices: readonly Choice<T>[], current: T, onChange: (value: T) => void) {
+    this.choices = choices;
+    this.current = current;
+    this.onChange = onChange;
     this.buttons = choices.map((choice) => {
       const button = h("button", { type: "button", role: "radio", "data-value": choice.value }, choice.label);
       button.addEventListener("click", () => this.choose(choice.value, false));
