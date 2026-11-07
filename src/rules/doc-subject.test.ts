@@ -25,6 +25,17 @@ describe("doc-subject", () => {
         expect(finding!.message).toContain("This function processes");
     });
 
+    it("reports a verb after an adverb, also a verb that the lexicon does not have", () => {
+        expect(found("/** Immediately emit all batched events. */")).toEqual(["emit"]);
+        expect(found("/** Manually trigger the cleanup of expired entries. */")).toEqual(["trigger"]);
+        expect(found("/** Automatically compact on each removal. */")).toEqual(["compact"]);
+    });
+
+    it("does not read a label before a dash or a colon as a verb", () => {
+        expect(found("/** CircularList<T> - List with a ring buffer. */")).toEqual([]);
+        expect(found("/** Default overflow policy: throw an error. */")).toEqual([]);
+    });
+
     it("examines only the first sentence of the summary", () => {
         expect(found("/** This function gives the head. Use it before a flush. */")).toEqual([]);
         expect(found("/**\n * This function gives the head.\n *\n * Use it before a flush.\n * @remarks\n * Do not call it twice.\n */")).toEqual([]);

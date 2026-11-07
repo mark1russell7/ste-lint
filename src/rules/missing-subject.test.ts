@@ -55,6 +55,20 @@ describe("missing-subject", () => {
         expect(found("/** Retrieves the head. */")).toEqual(["Retrieves"]);
     });
 
+    it("reports an -s verb after an adverb, and after a label and a dash or a colon", () => {
+        expect(found("/** Automatically resizes when the load factor is exceeded. */")).toEqual(["resizes"]);
+        expect(found("/** Always returns the head. */")).toEqual(["returns"]);
+        expect(found("/** Bounded behavior - Enforces capacity limits. */")).toEqual(["Enforces"]);
+        expect(found("/** Fan-in: merges the input channels into one channel. */")).toEqual(["merges"]);
+    });
+
+    it("does not report a name after an adverb, or an auxiliary verb after a label", () => {
+        expect(found("/** Only Windows has pool tags. */")).toEqual([]);
+        expect(found("/** Weekly rerun of the data. */")).toEqual([]);
+        expect(found("/** Capability: Can be cleared. */")).toEqual([]);
+        expect(found("/** Bounded collection - has a maximum capacity. */")).toEqual([]);
+    });
+
     it("does not report a plural noun before a clause or a comma", () => {
         expect(found("/** Values and keys are copied. */")).toEqual([]);
         expect(found("/** Values that are null stay. */")).toEqual([]);

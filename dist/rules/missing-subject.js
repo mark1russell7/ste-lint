@@ -1,6 +1,6 @@
 import { isParticiple, nextCounted, startsObject } from "../text/grammar.js";
 import { isCapitalized, isCounted, isWord } from "../text/tokens.js";
-import { BE_FORMS, CONJUNCTIONS, DETERMINERS, HAVE_FORMS, MODALS, PREPOSITIONS, SUBJECT_PRONOUNS } from "../text/words.js";
+import { BE_FORMS, CONJUNCTIONS, DETERMINERS, HAVE_FORMS, LEADING_ADVERBS, MIDDLE_ADVERBS, MODALS, PREPOSITIONS, SUBJECT_PRONOUNS } from "../text/words.js";
 import { tokenRange } from "./rule.js";
 /** Auxiliary verbs that start a sentence without a subject: "Is true when ...", "Can be null.". */
 const AUXILIARY_STARTS = new Set(["is", "are", "was", "were", "has", "have", "had", "does", "can", "cannot", "must", "will", "should", "may", "might", "would", "could"]);
@@ -114,24 +114,66 @@ function startsVerbClause(tokens, index, lexicon) {
     }
     return clause && !hasPluralVerbLater(tokens, index + 1, lexicon);
 }
+/** The marks after a label at the start of a summary: "Bounded behavior - Enforces ...", "Note: Returns ...". */
+const LABEL_MARKS = new Set(["-", "–", "—", ":"]);
+/** The most words of a label before its mark. */
+const LABEL_WORDS = 4;
+/** Adverbs before a verb that do not end in -ly. "Only" and "just" are not on the list: "Only Windows has it.". */
+const VERB_ADVERBS = new Set(["always", "never", "also"]);
+/** True when `token` is an adverb before a verb: "Automatically resizes ...", "Manually trigger ...". A known verb is not an adverb: "Apply ...". */
+function isLeadingAdverb(token, lexicon) {
+    if (!isWord(token) || lexicon.verbs.has(token.lower))
+        return false;
+    return VERB_ADVERBS.has(token.lower) || /^[a-z]{3,}ly$/.test(token.lower);
+}
+/**
+ * This function finds the word where the verb of a summary sentence can be. It skips the adverbs before a verb:
+ * "Automatically resizes the table.". With `labels`, it also skips a label of at most four words before a dash
+ * or a colon: "Bounded behavior - Enforces limits.".
+ */
+export function summaryStart(tokens, lexicon, labels) {
+    let index = nextCounted(tokens, 0);
+    let shifted = false;
+    let label = false;
+    let listedAdverb = false;
+    const mark = labels ? tokens.findIndex((token) => token.kind === "punct" && LABEL_MARKS.has(token.text)) : -1;
+    const labelWords = mark === -1 ? 0 : tokens.slice(0, mark).filter(isCounted).length;
+    if (labelWords >= 1 && labelWords <= LABEL_WORDS && nextCounted(tokens, mark + 1) !== -1) {
+        index = nextCounted(tokens, mark + 1);
+        shifted = true;
+        label = true;
+    }
+    // A capitalized word after the adverb is a name, not a verb: "Weekly Reports of ..."
+    while (index !== -1 && isLeadingAdverb(tokens[index], lexicon) && nextCounted(tokens, index + 1) !== -1 && !isCapitalized(tokens[nextCounted(tokens, index + 1)])) {
+        const lower = tokens[index].lower;
+        listedAdverb = VERB_ADVERBS.has(lower) || LEADING_ADVERBS.has(lower) || MIDDLE_ADVERBS.has(lower);
+        index = nextCounted(tokens, index + 1);
+        shifted = true;
+    }
+    return { index, shifted, label, listedAdverb };
+}
 /** The message when the sentence at `tokens` starts without a subject, or null. */
 export function missingSubject(tokens, lexicon) {
-    const k = nextCounted(tokens, 0);
+    const start = summaryStart(tokens, lexicon, true);
+    const k = start.index;
     const first = tokens[k];
-    if (!isWord(first) || !isCapitalized(first))
+    if (!isWord(first) || (!start.shifted && !isCapitalized(first)))
         return null;
     const lower = first.lower;
     const next = tokens[k + 1];
     const last = [...tokens].reverse().find((token) => token.kind === "punct");
-    if (AUXILIARY_STARTS.has(lower)) {
+    // After a label, only an -s verb is a fault: "Capability: Can be cleared." names a capability.
+    if (AUXILIARY_STARTS.has(lower) && !start.label) {
         if (last?.text === "?")
             return null;
         return { index: k, message: `This sentence has no subject. Write the subject before "${first.text}", for example "This value ${lower} ...".` };
     }
     if (/^[a-z]{3,}s$/.test(lower) && !/(ss|us|is|ous|ics|ness)$/.test(lower) && !NOT_VERBS.has(lower)) {
-        const knownVerb = stems(lower).some((stem) => lexicon.verbs.has(stem));
+        const knownVerb = start.listedAdverb || stems(lower).some((stem) => lexicon.verbs.has(stem));
         const verbClause = startsVerbClause(tokens, k, lexicon);
-        if (!verbClause && (next?.text === "," || isNounSubject(tokens, k, lexicon)))
+        // After an adverb of the word lists, an -s word is a verb: "Automatically resizes when ..."
+        const nounSubject = !start.listedAdverb && (next?.text === "," || isNounSubject(tokens, k, lexicon));
+        if (!verbClause && nounSubject)
             return null;
         if (!verbClause && !knownVerb && !startsObject(next))
             return null;
@@ -140,7 +182,9 @@ export function missingSubject(tokens, lexicon) {
         const example = lower === "returns" ? "This function gives ..." : `This function ${lower} ...`;
         return { index: k, message: `"${first.text}" has no subject. Do not omit the subject. Write a full sentence, for example "${example}".` };
     }
-    if (isParticiple(lower) && isWord(next) && AFTER_PARTICIPLE.has(next.lower) && !hasLaterSubject(tokens, k + 1)) {
+    // After an adverb in -ly that is not on the lists, a participle can be a noun: "Weekly rerun of the data."
+    const participleStart = !start.label && (!start.shifted || start.listedAdverb);
+    if (participleStart && isParticiple(lower) && isWord(next) && AFTER_PARTICIPLE.has(next.lower) && !hasLaterSubject(tokens, k + 1)) {
         return { index: k, message: `"${first.text}" starts a sentence that has no subject. Write a full sentence with a subject in the active voice, for example "The monitor uses this value when ...".` };
     }
     return null;

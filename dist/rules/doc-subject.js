@@ -1,7 +1,7 @@
-import { nextCounted, startsObject } from "../text/grammar.js";
+import { startsObject } from "../text/grammar.js";
 import { isCapitalized, isCounted, isWord } from "../text/tokens.js";
 import { BE_FORMS, DETERMINERS, HAVE_FORMS, MODALS, OBJECT_PRONOUNS, PREPOSITIONS, SUBJECT_PRONOUNS } from "../text/words.js";
-import { stems } from "./missing-subject.js";
+import { stems, summaryStart } from "./missing-subject.js";
 import { tokenRange } from "./rule.js";
 /** Words after a first word that show a noun: "Order of the keys ...", "Samples per round ...", "Tags whose ...". */
 const NOUN_FOLLOWERS = new Set(["of", "per", "whose", "which", "who", "whom", "and", "or"]);
@@ -38,7 +38,7 @@ function showsNoun(tokens, index, lexicon) {
     const after = tokens[index + 2];
     if (next === undefined || (next.kind === "punct" && next.text !== ","))
         return true;
-    const colon = tokens.findIndex((token) => token.kind === "punct" && token.text === ":");
+    const colon = tokens.findIndex((token, i) => i > index && token.kind === "punct" && token.text === ":");
     if (colon !== -1 && tokens.slice(index, colon).filter(isCounted).length <= 3)
         return true;
     if (next.kind === "code" || (isWord(next) && /^\d/.test(next.text)) || (isWord(next) && /^[A-Z]$/.test(next.text))) {
@@ -69,11 +69,15 @@ export function thirdPerson(verb) {
 }
 /** The index of the first word when the sentence at `tokens` starts with a verb in the imperative, or null. */
 export function imperativeStart(tokens, lexicon) {
-    const k = nextCounted(tokens, 0);
+    // A label before a dash names a type or a value: "CircularList<T> - List with a ring buffer."
+    const start = summaryStart(tokens, lexicon, false);
+    const k = start.index;
     const first = tokens[k];
-    if (!isWord(first) || !isCapitalized(first) || first.text !== first.text[0] + first.lower.slice(1))
+    if (!isWord(first) || first.text.slice(1) !== first.lower.slice(1) || (!start.shifted && !isCapitalized(first)))
         return null;
-    if (!lexicon.verbs.has(first.lower) || showsNoun(tokens, k, lexicon))
+    const verb = lexicon.verbs.has(first.lower) || (start.listedAdverb && isPlainWord(first) && !/(s|ed|ing)$/.test(first.lower));
+    // After an adverb of the word lists, the word is a verb: "Manually trigger cleanup of the entries."
+    if (!verb || (!start.listedAdverb && showsNoun(tokens, k, lexicon)))
         return null;
     return k;
 }
