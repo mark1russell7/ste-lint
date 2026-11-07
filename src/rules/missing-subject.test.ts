@@ -46,6 +46,24 @@ describe("missing-subject", () => {
         expect(found("/** `stop()` releases the timers. */")).toEqual([]);
     });
 
+    it("reports an -s verb before a clause, a comma and a conjunction, or a second -s verb", () => {
+        expect(found("/** Checks if an index is valid. */")).toEqual(["Checks"]);
+        expect(found("/** Ensures that the value is kept. */")).toEqual(["Ensures"]);
+        expect(found("/** Retrieves and removes the head. */")).toEqual(["Retrieves"]);
+        expect(found("/** Removes and gives the head. */")).toEqual(["Removes"]);
+        expect(found("/** Retrieves, but does not remove, the head. */")).toEqual(["Retrieves"]);
+        expect(found("/** Retrieves the head. */")).toEqual(["Retrieves"]);
+    });
+
+    it("does not report a plural noun before a clause or a comma", () => {
+        expect(found("/** Values and keys are copied. */")).toEqual([]);
+        expect(found("/** Values that are null stay. */")).toEqual([]);
+        expect(found("/** Methods that return a view. */")).toEqual([]);
+        expect(found("/** Tabs that obey the rule. */")).toEqual([]);
+        expect(found("/** Directories that the walk does not enter. */")).toEqual([]);
+        expect(found("/** Examples, with a target of 16 ms: */")).toEqual([]);
+    });
+
     it("does not examine block tag text, list items or Markdown files", () => {
         expect(found("/**\n * The function.\n * @returns Returns the value.\n * - Returns a list item.\n */")).toEqual([]);
         expect(linter.lintText("Returns the value.", "doc.md").filter((finding) => finding.ruleId === "missing-subject")).toEqual([]);

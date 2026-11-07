@@ -1,6 +1,8 @@
 import type { Lexicon } from "../lexicon.js";
 import { type Token } from "../text/tokens.js";
 import { type Rule } from "./rule.js";
+/** The base forms that an `-s` word can come from: "gives" gives "give" and "giv". */
+export declare function stems(word: string): string[];
 /** The message when the sentence at `tokens` starts without a subject, or null. */
 export declare function missingSubject(tokens: readonly Token[], lexicon: Lexicon): {
     index: number;

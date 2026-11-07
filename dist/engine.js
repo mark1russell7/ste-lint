@@ -38,7 +38,7 @@ export class ProseLinter {
         this.extractCode = options.extractCode ?? null;
         this.rules = RULES.flatMap((rule) => {
             const setting = config.rules[rule.id];
-            if (setting === "off")
+            if (setting === "off" || (setting === undefined && rule.enabledByDefault === false))
                 return [];
             if (rule.id === "unknown-word" && this.lexicon.dictionary === null)
                 return [];

@@ -12,7 +12,8 @@ const NOT_VERBS = new Set([
 ]);
 /** Words after a participle that show a missing subject: "Called when ...", "Used by ...". */
 const AFTER_PARTICIPLE = new Set([...PREPOSITIONS, "when", "if", "once", "only", "while", "as", "whenever", "unless"]);
-function stems(word) {
+/** The base forms that an `-s` word can come from: "gives" gives "give" and "giv". */
+export function stems(word) {
     const forms = [word.slice(0, -1)];
     if (word.endsWith("es"))
         forms.push(word.slice(0, -2));
@@ -80,6 +81,39 @@ function isNounSubject(tokens, index, lexicon) {
         return true;
     return isParticiple(lower) && isWord(after) && PREPOSITIONS.has(after.lower);
 }
+/** Words after a verb that start a clause or an object of that verb: "Checks if ...", "Ensures that ...". */
+const CLAUSE_STARTS = new Set(["if", "whether", "that"]);
+/** Words after a comma that join a second verb to the first verb: "Retrieves, but does not remove, ...". */
+const COMMA_CONJUNCTIONS = new Set(["but", "and", "or", "then"]);
+/**
+ * True when the words after an `-s` word show a verb with no subject, and not a plural noun.
+ * These words show a verb, when no verb for a plural subject comes later:
+ *
+ * - A comma and then a conjunction: "Retrieves, but does not remove, the head."
+ * - A known verb and then "if", "whether" or "that": "Checks if an index is valid."
+ * - "and" or "or", and then a second known `-s` verb: "Retrieves and removes the head."
+ *
+ * A comma before another word starts a noun phrase: "Examples, with a target of 16 ms:". An
+ * unknown word before "that" is a noun: "Directories that the walk does not enter.". After "that",
+ * a word that is not a subject starts a relative clause of a noun: "Tabs that obey ...".
+ */
+function startsVerbClause(tokens, index, lexicon) {
+    const next = tokens[index + 1];
+    const after = tokens[index + 2];
+    if (next === undefined)
+        return false;
+    const knownVerb = stems(tokens[index].lower).some((stem) => lexicon.verbs.has(stem));
+    let clause = knownVerb && isWord(next) && CLAUSE_STARTS.has(next.lower);
+    if (next.text === ",")
+        clause = isWord(after) && COMMA_CONJUNCTIONS.has(after.lower);
+    if (clause && isWord(next) && next.lower === "that" && !(startsObject(after) || (isWord(after) && SUBJECT_PRONOUNS.has(after.lower))))
+        return false;
+    if (!clause && isWord(next) && (next.lower === "and" || next.lower === "or")) {
+        const second = tokens[index + 2];
+        clause = isWord(second) && /^[a-z]{3,}s$/.test(second.lower) && stems(second.lower).some((stem) => lexicon.verbs.has(stem));
+    }
+    return clause && !hasPluralVerbLater(tokens, index + 1, lexicon);
+}
 /** The message when the sentence at `tokens` starts without a subject, or null. */
 export function missingSubject(tokens, lexicon) {
     const k = nextCounted(tokens, 0);
@@ -96,9 +130,10 @@ export function missingSubject(tokens, lexicon) {
     }
     if (/^[a-z]{3,}s$/.test(lower) && !/(ss|us|is|ous|ics|ness)$/.test(lower) && !NOT_VERBS.has(lower)) {
         const knownVerb = stems(lower).some((stem) => lexicon.verbs.has(stem));
-        if (next?.text === "," || isNounSubject(tokens, k, lexicon))
+        const verbClause = startsVerbClause(tokens, k, lexicon);
+        if (!verbClause && (next?.text === "," || isNounSubject(tokens, k, lexicon)))
             return null;
-        if (!knownVerb && !startsObject(next))
+        if (!verbClause && !knownVerb && !startsObject(next))
             return null;
         if (isWord(next) && PREPOSITIONS.has(next.lower) && hasPluralVerbLater(tokens, k + 2, lexicon))
             return null;

@@ -34,7 +34,10 @@ export type Rule = {
     readonly description : string;
     /** The related ASD-STE100 rule numbers. */
     readonly ste : string;
+    /** The severity of a finding when the configuration does not set one. */
     readonly defaultSeverity : Severity;
+    /** False when the rule examines a file only if the configuration turns it on. The default is true. */
+    readonly enabledByDefault? : boolean;
     readonly scope : RuleScope;
     check(unit : ProseUnit, context : RuleContext) : void;
 };

@@ -1,6 +1,6 @@
 // A bad and a good example for each rule and for each entry of the default word list. The tests lint each example
 // with the real rules: the bad example gets a finding of its rule or entry, and the good example gets no finding.
-import type { RuleId } from "@mark1russell7/ste-lint/core";
+import type { RuleId, SteConfigFile } from "@mark1russell7/ste-lint/core";
 import type { Mode } from "./model.ts";
 
 /** One pair of examples. */
@@ -11,6 +11,8 @@ export interface Example {
   readonly mode?: Mode;
   /** A small list of words for the dictionary. Only the rule unknown-word needs it. */
   readonly dictionary?: readonly string[];
+  /** The settings of the rules for the example. A rule that is off by default needs it. */
+  readonly rules?: SteConfigFile["rules"];
 }
 
 /** A list of made-up words for the example of the rule unknown-word. It is not a part of the ASD-STE100 dictionary. */
@@ -39,6 +41,12 @@ export const RULE_EXAMPLES: Readonly<Record<RuleId, Example>> = {
     bad: "/** Gives the count of the open files. */\nexport function openFiles(): number {\n  return 0;\n}\n",
     good: "/** This function gives the count of the open files. */\nexport function openFiles(): number {\n  return 0;\n}\n",
     mode: "doc",
+  },
+  "doc-subject": {
+    bad: "/** Subscribe to the events of the page. */\nexport function subscribe(): void {}\n",
+    good: "/** This function subscribes to the events of the page. */\nexport function subscribe(): void {}\n",
+    mode: "doc",
+    rules: { "doc-subject": "error" },
   },
   "ing-verb": { bad: "Stop the tool by closing the tab.", good: "To stop the tool, close the tab." },
   "unknown-word": {

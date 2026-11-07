@@ -43,7 +43,7 @@
       "propertyNames": {
         "enum": [
           "sentence-length", "paragraph-length", "modal-verb", "semicolon", "latin-abbreviation", "about-quantity",
-          "word-list", "gendered-pronoun", "first-person", "passive-instruction", "noun-cluster", "missing-subject",
+          "word-list", "gendered-pronoun", "first-person", "passive-instruction", "noun-cluster", "missing-subject", "doc-subject",
           "ing-verb", "unknown-word"
         ]
       },
