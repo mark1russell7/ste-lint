@@ -3,9 +3,8 @@ import { DEFAULT_WORD_LIST, type CodeExtractor } from "@mark1russell7/ste-lint/c
 import { buildCatalog, filterCatalog, NO_FILTER, type CatalogFilter, type CatalogItem } from "./catalog.ts";
 import { byId, h, Segmented } from "./chrome.ts";
 import type { Example } from "./examples.ts";
-import { lintExample } from "./lint.ts";
+import { exampleRequest, lintExample, type LoadRequest } from "./lint.ts";
 import { segments, SPAN_RULES, typographic, viewFindings } from "./model.ts";
-import type { LoadRequest } from "./playground.ts";
 
 /** The ID of the element of an item, for the links of the page. */
 export const itemElementId = (key: string): string => key.replace(":", "-").replace(/[^A-Za-z0-9_-]+/g, "_");
@@ -184,7 +183,7 @@ export class Explorer {
     if (ex === null) return null;
     const button = h("button", { type: "button", class: "try", "aria-label": `Try the bad example of ${item.title} in the playground` }, "Try in the playground");
     button.addEventListener("click", () =>
-      this.onTry({ text: ex.bad, mode: ex.mode ?? "markdown", ...(ex.dictionary === undefined ? {} : { dictionary: { words: ex.dictionary, source: "example words" } }) }),
+      this.onTry(exampleRequest(ex)),
     );
     return button;
   }
