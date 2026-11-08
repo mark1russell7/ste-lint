@@ -52,7 +52,7 @@
     "typescript": "^6.0.3"
   },
   "devDependencies": {
-    "@mark1russell7/conventions": "^0.36.1",
+    "@mark1russell7/conventions": "^0.36.2",
     "@mark1russell7/cue": "^2.1.1",
     "@types/node": "^26.6.4",
     "tsx": "^4.23.15",
@@ -65,8 +65,10 @@
       },
       "typed-scripts": {
         "ignore": [
-          "dist/**",
           "site/check-probe.js"
+        ],
+        "generated": [
+          "dist/**"
         ],
         "reason": "dist/ is the build output of src/, which is TypeScript. site/check-probe.js uses the global helpers of the site check of site-pages, and this repository has no type declarations for them yet."
       }
