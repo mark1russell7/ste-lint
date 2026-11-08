@@ -19,6 +19,8 @@ export type BlockOrigin = {
     readonly tsdocSection : TsdocSection | null;
     /** For a doc comment: the block tag, for example `@param`, or null for the summary. */
     readonly tsdocTag : string | null;
+    /** True for the first block of the summary of a doc comment: the text that tells what the code is or does. */
+    readonly tsdocLead? : boolean;
 };
 
 export type ExtractedBlock = {

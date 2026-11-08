@@ -50,5 +50,7 @@ export function wordsDictionary(words: readonly string[], source = "words"): Dic
 export function lintExample(example: Example, which: "bad" | "good", extractCode?: CodeExtractor): Finding[] {
   const dictionary = example.dictionary === undefined ? null : wordsDictionary(example.dictionary, "example");
   const mode: Mode = example.mode ?? "markdown";
-  return makeLinter(DEFAULT_SETTINGS, dictionary, extractCode).lintText(example[which], MODE_PATH[mode]);
+  if (example.rules === undefined) return makeLinter(DEFAULT_SETTINGS, dictionary, extractCode).lintText(example[which], MODE_PATH[mode]);
+  const config = baseConfig({ ...configFile(DEFAULT_SETTINGS), rules: example.rules });
+  return new ProseLinter(config, buildLexicon(config, dictionary), extractCode === undefined ? {} : { extractCode }).lintText(example[which], MODE_PATH[mode]);
 }

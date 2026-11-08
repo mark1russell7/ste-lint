@@ -162,12 +162,14 @@ export function extractTsdoc(text, fileName) {
         collector.block(comment.pos, comment.end);
         for (const section of splitSections(docCommentLines(text, comment))) {
             const origin = { source: "tsdoc", tsdocSection: section.section, tsdocTag: section.tag };
+            let lead = section.section === "summary";
             for (const block of parseBlocks(section.lines, { mdx: false })) {
                 if (block.kind === "directive") {
                     collector.directive(block);
                     continue;
                 }
-                blocks.push({ block, origin });
+                blocks.push({ block, origin: lead ? { ...origin, tsdocLead: true } : origin });
+                lead = false;
             }
         }
     }

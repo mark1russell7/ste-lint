@@ -1,4 +1,5 @@
 import { aboutQuantity } from "./about-quantity.js";
+import { docSubject } from "./doc-subject.js";
 import { ingVerb } from "./ing-verb.js";
 import { latinAbbreviation } from "./latin-abbreviation.js";
 import { missingSubjectRule } from "./missing-subject.js";
@@ -25,6 +26,7 @@ export const RULES = [
     passiveInstruction,
     nounCluster,
     missingSubjectRule,
+    docSubject,
     ingVerb,
     unknownWord,
 ];

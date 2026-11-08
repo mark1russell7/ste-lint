@@ -35,6 +35,7 @@ Headings and table cells are fragments. They get only the word rules, not the se
 | `passive-instruction` | warning | 3.6, 5.3 | The passive voice in an instruction, or an obligation in the passive voice (`must be set`). |
 | `noun-cluster` | warning | 2.1 | More than 3 known nouns in sequence. |
 | `missing-subject` | error | 4.2 | A doc comment sentence without a subject, for example `Returns the value.` |
+| `doc-subject` | off (error when on) | 4.2 | A doc comment summary that starts with a verb in the imperative, for example `Subscribe to an event.` A project turns it on in `rules`. |
 | `ing-verb` | warning | 3.5 | An `-ing` form that the text uses as a verb. |
 | `unknown-word` | warning | 1.1, 1.5, 1.12 | A word that is not in the local dictionary or the project glossary. This rule is active only with a dictionary. |
 

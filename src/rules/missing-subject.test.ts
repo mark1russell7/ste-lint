@@ -46,6 +46,38 @@ describe("missing-subject", () => {
         expect(found("/** `stop()` releases the timers. */")).toEqual([]);
     });
 
+    it("reports an -s verb before a clause, a comma and a conjunction, or a second -s verb", () => {
+        expect(found("/** Checks if an index is valid. */")).toEqual(["Checks"]);
+        expect(found("/** Ensures that the value is kept. */")).toEqual(["Ensures"]);
+        expect(found("/** Retrieves and removes the head. */")).toEqual(["Retrieves"]);
+        expect(found("/** Removes and gives the head. */")).toEqual(["Removes"]);
+        expect(found("/** Retrieves, but does not remove, the head. */")).toEqual(["Retrieves"]);
+        expect(found("/** Retrieves the head. */")).toEqual(["Retrieves"]);
+    });
+
+    it("reports an -s verb after an adverb, and after a label and a dash or a colon", () => {
+        expect(found("/** Automatically resizes when the load factor is exceeded. */")).toEqual(["resizes"]);
+        expect(found("/** Always returns the head. */")).toEqual(["returns"]);
+        expect(found("/** Bounded behavior - Enforces capacity limits. */")).toEqual(["Enforces"]);
+        expect(found("/** Fan-in: merges the input channels into one channel. */")).toEqual(["merges"]);
+    });
+
+    it("does not report a name after an adverb, or an auxiliary verb after a label", () => {
+        expect(found("/** Only Windows has pool tags. */")).toEqual([]);
+        expect(found("/** Weekly rerun of the data. */")).toEqual([]);
+        expect(found("/** Capability: Can be cleared. */")).toEqual([]);
+        expect(found("/** Bounded collection - has a maximum capacity. */")).toEqual([]);
+    });
+
+    it("does not report a plural noun before a clause or a comma", () => {
+        expect(found("/** Values and keys are copied. */")).toEqual([]);
+        expect(found("/** Values that are null stay. */")).toEqual([]);
+        expect(found("/** Methods that return a view. */")).toEqual([]);
+        expect(found("/** Tabs that obey the rule. */")).toEqual([]);
+        expect(found("/** Directories that the walk does not enter. */")).toEqual([]);
+        expect(found("/** Examples, with a target of 16 ms: */")).toEqual([]);
+    });
+
     it("does not examine block tag text, list items or Markdown files", () => {
         expect(found("/**\n * The function.\n * @returns Returns the value.\n * - Returns a list item.\n */")).toEqual([]);
         expect(linter.lintText("Returns the value.", "doc.md").filter((finding) => finding.ruleId === "missing-subject")).toEqual([]);

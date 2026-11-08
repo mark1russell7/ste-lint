@@ -16,6 +16,7 @@ export const RULE_IDS = [
     "passive-instruction",
     "noun-cluster",
     "missing-subject",
+    "doc-subject",
     "ing-verb",
     "unknown-word",
 ] as const;

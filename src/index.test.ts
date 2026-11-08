@@ -13,7 +13,7 @@ describe("public API", () => {
         expect(api.CONFIG_FILE_NAME).toBe("ste.config.json");
         expect(api.DICTIONARY_ENV).toBe("STE_DICTIONARY");
         expect(api.DICTIONARY_FORMAT).toBe("ste-lint-dictionary");
-        expect(api.RULE_IDS).toHaveLength(14);
+        expect(api.RULE_IDS).toHaveLength(15);
         expect(api.DEFAULT_LIMITS.instructionWords).toBe(20);
         expect(api.DEFAULT_INCLUDE).toContain("README.md");
         expect(api.DEFAULT_IGNORE).toContain("**/node_modules/**");
