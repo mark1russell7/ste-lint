@@ -1,7 +1,7 @@
 // The playground: the editor with the marks of the findings, the list of the findings, the counts by rule and the settings.
 import { DEFAULT_LIMITS, DEFAULT_WORD_LIST, parseDictionary, type CodeExtractor, type Dictionary, type Limits, type RuleId } from "@mark1russell7/ste-lint/core";
 import { byId, copyText, h, Segmented } from "./chrome.ts";
-import { configFile, DEFAULT_SETTINGS, makeLinter, wordsDictionary, type Settings } from "./lint.ts";
+import { configFile, DEFAULT_SETTINGS, loadCodeExtractor, makeLinter, wordsDictionary, type LoadRequest, type RuleSettings, type Settings } from "./lint.ts";
 import {
   applyFix,
   encodeShare,
@@ -38,13 +38,6 @@ export interface PlaygroundEvents {
   readonly onCodeExtractor: (extractCode: CodeExtractor) => void;
 }
 
-/** A text that the playground loads, with its kind and an optional dictionary. */
-export interface LoadRequest {
-  readonly text: string;
-  readonly mode: Mode;
-  readonly dictionary?: { readonly words: readonly string[]; readonly source: string };
-}
-
 const terms = (value: string): string[] =>
   value
     .split(/[\n,]/)
@@ -65,6 +58,8 @@ export class Playground {
   private mode: Mode = "markdown";
   private settings: Settings = DEFAULT_SETTINGS;
   private dictionary: Dictionary | null = null;
+  /** The settings of the rules of the loaded text. The example of a rule that is off by default turns it on. */
+  private rules: RuleSettings | undefined = undefined;
   private extractCode: CodeExtractor | null = null;
   private linted = "";
   private findings: ViewFinding[] = [];
@@ -106,6 +101,8 @@ export class Playground {
   async load(request: LoadRequest, focus = false): Promise<void> {
     if (request.dictionary !== undefined) this.setDictionary(wordsDictionary(request.dictionary.words, request.dictionary.source), request.dictionary.source);
     this.editor.value = request.text;
+    this.rules = request.rules;
+    this.showConfig();
     this.sample.value = SAMPLES.find((s) => s.text === request.text && s.mode === request.mode)?.id ?? "";
     this.ruleFilter = null;
     this.active = null;
@@ -189,7 +186,7 @@ export class Playground {
   }
 
   private showConfig(): void {
-    byId("config-out").textContent = JSON.stringify({ $schema: "./node_modules/@mark1russell7/ste-lint/ste.config.schema.json", ...configFile(this.settings) }, null, 2);
+    byId("config-out").textContent = JSON.stringify({ $schema: "./node_modules/@mark1russell7/ste-lint/ste.config.schema.json", ...configFile(this.settings, this.rules) }, null, 2);
   }
 
   private setDictionary(dictionary: Dictionary | null, source: string): void {
@@ -206,9 +203,18 @@ export class Playground {
     if (mode === "doc" && this.extractCode === null) {
       this.status.textContent = "Loading the TypeScript parser for the doc comments…";
       this.backdrop.replaceChildren(document.createTextNode(this.editor.value));
-      const code = await import("@mark1russell7/ste-lint/code");
-      this.extractCode = code.extractCode;
-      this.events.onCodeExtractor(code.extractCode);
+      const extractCode = await loadCodeExtractor();
+      if (extractCode === null) {
+        // The list does not keep the findings of the earlier text. A later selection of the doc comments tries the import again.
+        this.findings = [];
+        this.renderTotals();
+        this.renderTally();
+        this.renderList();
+        this.status.textContent = "The parser for the doc comments did not load. Reload the page to try again.";
+        return;
+      }
+      this.extractCode = extractCode;
+      this.events.onCodeExtractor(extractCode);
     }
     this.fit();
     this.run();
@@ -220,7 +226,7 @@ export class Playground {
     window.clearTimeout(this.timer);
     if (this.mode === "doc" && this.extractCode === null) return;
     const text = this.editor.value;
-    const linter = makeLinter(this.settings, this.dictionary, this.extractCode ?? undefined);
+    const linter = makeLinter(this.settings, this.dictionary, this.extractCode ?? undefined, this.rules);
     const t0 = performance.now();
     const raw = linter.lintText(text, MODE_PATH[this.mode]);
     this.lastMs = performance.now() - t0;
