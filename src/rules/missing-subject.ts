@@ -166,9 +166,26 @@ export function summaryStart(tokens : readonly Token[], lexicon : Lexicon, label
     return { index, shifted, label, listedAdverb };
 }
 
-/** The message when the sentence at `tokens` starts without a subject, or null. */
-export function missingSubject(tokens : readonly Token[], lexicon : Lexicon) : { index : number; message : string } | null {
+/** A sentence with no subject: the index of its first word, and the message. */
+type SubjectFault = { index : number; message : string };
+
+/**
+ * This function gives the message when the sentence at `tokens` starts without a subject, or null.
+ * A label has a capitalized word after its mark: "Note: Returns ...". When a lowercase word follows the mark,
+ * the words before the mark can be the sentence: "Returns the mode: read or write.". Then the function
+ * also examines the sentence with no label, and a fault there wins.
+ */
+export function missingSubject(tokens : readonly Token[], lexicon : Lexicon) : SubjectFault | null {
     const start = summaryStart(tokens, lexicon, true);
+    if (start.label && !isCapitalized(tokens[start.index])) {
+        const plain = subjectFault(tokens, lexicon, summaryStart(tokens, lexicon, false));
+        if (plain !== null) return plain;
+    }
+    return subjectFault(tokens, lexicon, start);
+}
+
+/** The message when the sentence at `tokens` has no subject at `start`, or null. */
+function subjectFault(tokens : readonly Token[], lexicon : Lexicon, start : SummaryStart) : SubjectFault | null {
     const k = start.index;
     const first = tokens[k];
     if (!isWord(first) || (!start.shifted && !isCapitalized(first))) return null;

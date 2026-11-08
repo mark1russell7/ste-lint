@@ -69,6 +69,17 @@ describe("missing-subject", () => {
         expect(found("/** Bounded collection - has a maximum capacity. */")).toEqual([]);
     });
 
+    it("reports a verb before a colon or a dash, when a lowercase word follows the mark", () => {
+        expect(found("/** Returns the mode: read or write. */")).toEqual(["Returns"]);
+        expect(found("/** Gets the key - or null. */")).toEqual(["Gets"]);
+    });
+
+    it("does not report a real label before a colon or a dash", () => {
+        expect(found("/** Note: the value is cached. */")).toEqual([]);
+        expect(found("/** Bounded behavior - The limit holds. */")).toEqual([]);
+        expect(found("/** Read mode: the file opens once. */")).toEqual([]);
+    });
+
     it("does not report a plural noun before a clause or a comma", () => {
         expect(found("/** Values and keys are copied. */")).toEqual([]);
         expect(found("/** Values that are null stay. */")).toEqual([]);

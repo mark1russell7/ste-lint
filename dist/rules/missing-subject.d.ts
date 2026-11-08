@@ -19,11 +19,18 @@ export type SummaryStart = {
  * or a colon: "Bounded behavior - Enforces limits.".
  */
 export declare function summaryStart(tokens: readonly Token[], lexicon: Lexicon, labels: boolean): SummaryStart;
-/** The message when the sentence at `tokens` starts without a subject, or null. */
-export declare function missingSubject(tokens: readonly Token[], lexicon: Lexicon): {
+/** A sentence with no subject: the index of its first word, and the message. */
+type SubjectFault = {
     index: number;
     message: string;
-} | null;
+};
+/**
+ * This function gives the message when the sentence at `tokens` starts without a subject, or null.
+ * A label has a capitalized word after its mark: "Note: Returns ...". When a lowercase word follows the mark,
+ * the words before the mark can be the sentence: "Returns the mode: read or write.". Then the function
+ * also examines the sentence with no label, and a fault there wins.
+ */
+export declare function missingSubject(tokens: readonly Token[], lexicon: Lexicon): SubjectFault | null;
 /**
  * The rule examines the summary and the `@remarks` text of doc comments.
  * For example, "Returns the value." and "Called when the page is hidden."
@@ -31,4 +38,5 @@ export declare function missingSubject(tokens: readonly Token[], lexicon: Lexico
  * be fragments, so the rule does not examine them.
  */
 export declare const missingSubjectRule: Rule;
+export {};
 //# sourceMappingURL=missing-subject.d.ts.map
