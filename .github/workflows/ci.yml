@@ -21,33 +21,19 @@ defaults:
     shell: bash
 
 jobs:
+  # The shared CI of mark1russell7 (reusable-ci.yml of the template, CI.md). It starts each standard script that
+  # package.json has: typecheck, check:conventions, test, build and lint:ste.
   ci:
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@v7
-        with:
-          # The whole history, so that check:conventions reads each commit of a pull request
-          fetch-depth: 0
-      # The pnpm version comes from "packageManager" in package.json
-      - uses: pnpm/action-setup@v6
-      - uses: actions/setup-node@v7
-        with:
-          node-version: 26
-          cache: pnpm
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm typecheck
-      # The conventions of the repositories of mark1russell7 (@mark1russell7/conventions)
-      - run: pnpm check:conventions
-      - run: pnpm test
-      - run: pnpm build
-      # dist/ is committed, so that a git dependency needs no build at install
-      - name: dist/ agrees with src/
-        run: git diff --exit-code --stat -- dist && test -z "$(git status --porcelain -- dist)"
-      # The writing rules (ASD-STE100) of the README and the doc comments
-      - run: pnpm lint:ste
-      # The site bundles the core of the package. A change that breaks the bundle stops the pull request, not the deploy.
-      - run: pnpm --filter @ste-lint/site run build
+    uses: mark1russell7/template/.github/workflows/reusable-ci.yml@600ff4b757d17c8681961d19aea7b5224ab4fa80 # main
+    permissions:
+      contents: read
+    with:
+      # dist/ is committed, so that a git dependency needs no build at install. The site bundles the core of the
+      # package, so a change that breaks the bundle stops the pull request, not the deploy.
+      run: |
+        git diff --exit-code --stat -- dist
+        test -z "$(git status --porcelain -- dist)"
+        pnpm --filter @ste-lint/site run build
 
   # The one check of the ruleset of main (CI.md of mark1russell7/template, "The check of the ruleset").
   # It passes only when each job of needs passed, or was skipped by its own if and ALLOW_SKIP names it.
