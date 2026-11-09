@@ -55,14 +55,12 @@
     "@mark1russell7/conventions": "^0.38.1",
     "@mark1russell7/cue": "^2.1.1",
     "@types/node": "^26.6.4",
+    "@vitest/coverage-v8": "^5.0.3",
     "tsx": "^4.23.15",
     "vitest": "^5.0.3"
   },
   "conventions": {
     "rules": {
-      "shared-ci": {
-        "off": "The ruleset of main requires the check ci. A call of the shared CI gives other check names, and only the owner changes the ruleset."
-      },
       "no-build-output": {
         "off": "Git keeps dist/, because other repositories install this package from git, and a git dependency needs no build at install. CI checks that dist/ agrees with src/."
       },
