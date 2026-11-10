@@ -1,0 +1,432 @@
+# The public API of @mark1russell7/ste-lint
+#
+# The names of each entry of the exports field, and the declaration of each name, without comments
+# and private members. The command `api-report check` compares this file with the built .d.ts files.
+# To accept a change of the API, start the build, then `api-report update`, and review the diff.
+
+## . (dist/index.d.ts): names
+
+type BaseConfigOptions: dist/config-core.d.ts#BaseConfigOptions
+CONFIG_FILE_NAME: dist/config-core.d.ts#CONFIG_FILE_NAME
+type CliIo: dist/run-cli.d.ts#CliIo
+type CliOptions: dist/run-cli.d.ts#CliOptions
+type CodeExtractor: dist/engine.d.ts#CodeExtractor
+ConfigError: dist/config-core.d.ts#ConfigError
+DEFAULT_IGNORE: dist/config-core.d.ts#DEFAULT_IGNORE
+DEFAULT_INCLUDE: dist/config-core.d.ts#DEFAULT_INCLUDE
+DEFAULT_LIMITS: dist/config-core.d.ts#DEFAULT_LIMITS
+DEFAULT_WORD_LIST: dist/word-list.d.ts#DEFAULT_WORD_LIST
+DICTIONARY_ENV: dist/config-core.d.ts#DICTIONARY_ENV
+DICTIONARY_FORMAT: dist/dictionary-core.d.ts#DICTIONARY_FORMAT
+Dictionary: dist/dictionary-core.d.ts#Dictionary
+type DictionaryEntry: dist/dictionary-core.d.ts#DictionaryEntry
+DictionaryError: dist/dictionary-core.d.ts#DictionaryError
+type DictionaryLookup: dist/dictionary-core.d.ts#DictionaryLookup
+type FileKind: dist/engine.d.ts#FileKind
+type Finding: dist/types.d.ts#Finding
+type Lexicon: dist/lexicon.d.ts#Lexicon
+type Limits: dist/config-core.d.ts#Limits
+type LimitsConfig: dist/config-core.d.ts#LimitsConfig
+Linter: dist/lint.d.ts#Linter
+ProseLinter: dist/engine.d.ts#ProseLinter
+type ProseLinterOptions: dist/engine.d.ts#ProseLinterOptions
+RULES: dist/rules/index.d.ts#RULES
+RULE_IDS: dist/types.d.ts#RULE_IDS
+type ResolvedConfig: dist/config-core.d.ts#ResolvedConfig
+type Rule: dist/rules/rule.d.ts#Rule
+type RuleCount: dist/format.d.ts#RuleCount
+type RuleId: dist/types.d.ts#RuleId
+type RuleSetting: dist/types.d.ts#RuleSetting
+type Severity: dist/types.d.ts#Severity
+type SteConfigFile: dist/config-core.d.ts#SteConfigFile
+type Summary: dist/format.d.ts#Summary
+USAGE: dist/run-cli.d.ts#USAGE
+type WordListEntry: dist/word-list.d.ts#WordListEntry
+type WordListEntryConfig: dist/config-core.d.ts#WordListEntryConfig
+baseConfig: dist/config-core.d.ts#baseConfig
+buildLexicon: dist/lexicon.d.ts#buildLexicon
+extractCode: dist/source/code.d.ts#extractCode
+fileKind: dist/engine.d.ts#fileKind
+findConfigFile: dist/config.d.ts#findConfigFile
+findFiles: dist/files.d.ts#findFiles
+formatJson: dist/format.d.ts#formatJson
+formatText: dist/format.d.ts#formatText
+getRule: dist/rules/index.d.ts#getRule
+globToRegExp: dist/files.d.ts#globToRegExp
+isRuleId: dist/types.d.ts#isRuleId
+lintText: dist/lint.d.ts#lintText
+loadConfig: dist/config.d.ts#loadConfig
+loadDictionary: dist/dictionary.d.ts#loadDictionary
+mergeWordList: dist/config-core.d.ts#mergeWordList
+parseArgs: dist/run-cli.d.ts#parseArgs
+parseDictionary: dist/dictionary-core.d.ts#parseDictionary
+resolveConfig: dist/config.d.ts#resolveConfig
+runCli: dist/run-cli.d.ts#runCli
+summarize: dist/format.d.ts#summarize
+validateConfig: dist/config-core.d.ts#validateConfig
+
+## ./core (dist/core.d.ts): names
+
+type BaseConfigOptions: dist/config-core.d.ts#BaseConfigOptions
+CONFIG_FILE_NAME: dist/config-core.d.ts#CONFIG_FILE_NAME
+type CodeExtractor: dist/engine.d.ts#CodeExtractor
+ConfigError: dist/config-core.d.ts#ConfigError
+DEFAULT_IGNORE: dist/config-core.d.ts#DEFAULT_IGNORE
+DEFAULT_INCLUDE: dist/config-core.d.ts#DEFAULT_INCLUDE
+DEFAULT_LIMITS: dist/config-core.d.ts#DEFAULT_LIMITS
+DEFAULT_WORD_LIST: dist/word-list.d.ts#DEFAULT_WORD_LIST
+DICTIONARY_ENV: dist/config-core.d.ts#DICTIONARY_ENV
+DICTIONARY_FORMAT: dist/dictionary-core.d.ts#DICTIONARY_FORMAT
+Dictionary: dist/dictionary-core.d.ts#Dictionary
+type DictionaryEntry: dist/dictionary-core.d.ts#DictionaryEntry
+DictionaryError: dist/dictionary-core.d.ts#DictionaryError
+type DictionaryLookup: dist/dictionary-core.d.ts#DictionaryLookup
+type FileKind: dist/engine.d.ts#FileKind
+type Finding: dist/types.d.ts#Finding
+type Lexicon: dist/lexicon.d.ts#Lexicon
+type Limits: dist/config-core.d.ts#Limits
+type LimitsConfig: dist/config-core.d.ts#LimitsConfig
+ProseLinter: dist/engine.d.ts#ProseLinter
+type ProseLinterOptions: dist/engine.d.ts#ProseLinterOptions
+RULES: dist/rules/index.d.ts#RULES
+RULE_IDS: dist/types.d.ts#RULE_IDS
+type ResolvedConfig: dist/config-core.d.ts#ResolvedConfig
+type Rule: dist/rules/rule.d.ts#Rule
+type RuleCount: dist/format.d.ts#RuleCount
+type RuleId: dist/types.d.ts#RuleId
+type RuleSetting: dist/types.d.ts#RuleSetting
+type Severity: dist/types.d.ts#Severity
+type SteConfigFile: dist/config-core.d.ts#SteConfigFile
+type Summary: dist/format.d.ts#Summary
+type WordListEntry: dist/word-list.d.ts#WordListEntry
+type WordListEntryConfig: dist/config-core.d.ts#WordListEntryConfig
+baseConfig: dist/config-core.d.ts#baseConfig
+buildLexicon: dist/lexicon.d.ts#buildLexicon
+fileKind: dist/engine.d.ts#fileKind
+formatJson: dist/format.d.ts#formatJson
+formatText: dist/format.d.ts#formatText
+getRule: dist/rules/index.d.ts#getRule
+isRuleId: dist/types.d.ts#isRuleId
+mergeWordList: dist/config-core.d.ts#mergeWordList
+parseDictionary: dist/dictionary-core.d.ts#parseDictionary
+summarize: dist/format.d.ts#summarize
+validateConfig: dist/config-core.d.ts#validateConfig
+
+## ./code (dist/source/code.d.ts): names
+
+extractCode: dist/source/code.d.ts#extractCode
+
+## ./ste.config.schema.json: no declaration file for ./ste.config.schema.json
+
+file ./ste.config.schema.json: ste.config.schema.json
+
+## bin: 1 commands
+
+ste-lint: ./dist/cli.js
+
+## Declarations
+
+### dist/config-core.d.ts#BaseConfigOptions
+export type BaseConfigOptions = {
+    readonly root?: string;
+    readonly configFile?: string | null;
+};
+
+### dist/config-core.d.ts#CONFIG_FILE_NAME
+export declare const CONFIG_FILE_NAME = "ste.config.json";
+
+### dist/config-core.d.ts#ConfigError
+export declare class ConfigError extends Error {
+    readonly name: string;
+}
+
+### dist/config-core.d.ts#DEFAULT_IGNORE
+export declare const DEFAULT_IGNORE: readonly string[];
+
+### dist/config-core.d.ts#DEFAULT_INCLUDE
+export declare const DEFAULT_INCLUDE: readonly string[];
+
+### dist/config-core.d.ts#DEFAULT_LIMITS
+export declare const DEFAULT_LIMITS: Limits;
+
+### dist/config-core.d.ts#DICTIONARY_ENV
+export declare const DICTIONARY_ENV = "STE_DICTIONARY";
+
+### dist/config-core.d.ts#Limits
+export type Limits = Required<LimitsConfig>;
+
+### dist/config-core.d.ts#LimitsConfig
+export type LimitsConfig = {
+    readonly instructionWords?: number;
+    readonly descriptionWords?: number;
+    readonly paragraphSentences?: number;
+    readonly nounClusterNouns?: number;
+};
+
+### dist/config-core.d.ts#ResolvedConfig
+export type ResolvedConfig = {
+    readonly root: string;
+    readonly configFile: string | null;
+    readonly include: readonly string[];
+    readonly ignore: readonly string[];
+    readonly technicalNouns: readonly string[];
+    readonly technicalVerbs: readonly string[];
+    readonly properNouns: readonly string[];
+    readonly allowedWords: readonly string[];
+    readonly rules: Readonly<Partial<Record<RuleId, RuleSetting>>>;
+    readonly wordList: readonly WordListEntry[];
+    readonly limits: Limits;
+    readonly dictionaryPath: string | null;
+    readonly dictionarySource: "env" | "config" | null;
+};
+
+### dist/config-core.d.ts#SteConfigFile
+export type SteConfigFile = {
+    readonly $schema?: string;
+    readonly include?: readonly string[];
+    readonly ignore?: readonly string[];
+    readonly technicalNouns?: readonly string[];
+    readonly technicalVerbs?: readonly string[];
+    readonly properNouns?: readonly string[];
+    readonly allowedWords?: readonly string[];
+    readonly rules?: Readonly<Record<string, RuleSetting>>;
+    readonly wordList?: readonly WordListEntryConfig[];
+    readonly limits?: LimitsConfig;
+    readonly dictionaryPath?: string | null;
+};
+
+### dist/config-core.d.ts#WordListEntryConfig
+export type WordListEntryConfig = {
+    readonly id?: string;
+    readonly match?: string | readonly string[];
+    readonly suggest?: string | null;
+    readonly note?: string | null;
+    readonly severity?: RuleSetting;
+    readonly verbOnly?: boolean;
+};
+
+### dist/config-core.d.ts#baseConfig
+export declare function baseConfig(file?: SteConfigFile, options?: BaseConfigOptions): ResolvedConfig;
+
+### dist/config-core.d.ts#mergeWordList
+export declare function mergeWordList(defaults: readonly WordListEntry[], overrides: readonly WordListEntryConfig[]): WordListEntry[];
+
+### dist/config-core.d.ts#validateConfig
+export declare function validateConfig(value: unknown, source: string): SteConfigFile;
+
+### dist/config.d.ts#findConfigFile
+export declare function findConfigFile(cwd: string): string | null;
+
+### dist/config.d.ts#loadConfig
+export declare function loadConfig(options: LoadOptions): ResolvedConfig;
+
+### dist/config.d.ts#resolveConfig
+export declare function resolveConfig(file: SteConfigFile, options: ResolveOptions): ResolvedConfig;
+
+### dist/dictionary-core.d.ts#DICTIONARY_FORMAT
+export declare const DICTIONARY_FORMAT = "ste-lint-dictionary";
+
+### dist/dictionary-core.d.ts#Dictionary
+export declare class Dictionary {
+    readonly nouns: Set<string>;
+    readonly verbs: Set<string>;
+    constructor(entries: readonly DictionaryEntry[]);
+    get size(): number;
+    lookup(word: string): DictionaryLookup;
+}
+
+### dist/dictionary-core.d.ts#DictionaryEntry
+export type DictionaryEntry = {
+    readonly word: string;
+    readonly pos?: string;
+    readonly approved?: boolean;
+    readonly forms?: readonly string[];
+    readonly alternatives?: readonly string[];
+};
+
+### dist/dictionary-core.d.ts#DictionaryError
+export declare class DictionaryError extends Error {
+    readonly name: string;
+}
+
+### dist/dictionary-core.d.ts#DictionaryLookup
+export type DictionaryLookup = {
+    readonly status: "approved";
+} | {
+    readonly status: "not-approved";
+    readonly alternatives: readonly string[];
+} | {
+    readonly status: "unknown";
+};
+
+### dist/dictionary-core.d.ts#parseDictionary
+export declare function parseDictionary(value: unknown, source: string): Dictionary;
+
+### dist/dictionary.d.ts#loadDictionary
+export declare function loadDictionary(path: string): Dictionary;
+
+### dist/engine.d.ts#CodeExtractor
+export type CodeExtractor = (text: string, path: string) => Extraction;
+
+### dist/engine.d.ts#FileKind
+export type FileKind = "markdown" | "mdx" | "typescript";
+
+### dist/engine.d.ts#ProseLinter
+export declare class ProseLinter {
+    readonly lexicon: Lexicon;
+    readonly config: ResolvedConfig;
+    constructor(config: ResolvedConfig, lexicon?: Lexicon, options?: ProseLinterOptions);
+    units(text: string, path: string): ProseUnit[];
+    lintText(text: string, path: string): Finding[];
+}
+
+### dist/engine.d.ts#ProseLinterOptions
+export type ProseLinterOptions = {
+    readonly extractCode?: CodeExtractor;
+};
+
+### dist/engine.d.ts#fileKind
+export declare function fileKind(path: string): FileKind | null;
+
+### dist/files.d.ts#findFiles
+export declare function findFiles(options: FindOptions): string[];
+
+### dist/files.d.ts#globToRegExp
+export declare function globToRegExp(glob: string): RegExp;
+
+### dist/format.d.ts#RuleCount
+export type RuleCount = {
+    readonly errors: number;
+    readonly warnings: number;
+};
+
+### dist/format.d.ts#Summary
+export type Summary = {
+    readonly files: number;
+    readonly filesWithFindings: number;
+    readonly errors: number;
+    readonly warnings: number;
+    readonly byRule: Readonly<Partial<Record<RuleId, RuleCount>>>;
+};
+
+### dist/format.d.ts#formatJson
+export declare function formatJson(findings: readonly Finding[], summary: Summary): string;
+
+### dist/format.d.ts#formatText
+export declare function formatText(findings: readonly Finding[], summary: Summary): string;
+
+### dist/format.d.ts#summarize
+export declare function summarize(findings: readonly Finding[], files: number): Summary;
+
+### dist/lexicon.d.ts#Lexicon
+export type Lexicon = {
+    readonly technicalNouns: ReadonlySet<string>;
+    readonly technicalVerbs: ReadonlySet<string>;
+    readonly properNouns: ReadonlySet<string>;
+    readonly allowedWords: ReadonlySet<string>;
+    readonly glossaryPhrases: PhraseMatcher;
+    readonly technicalNounPhrases: PhraseMatcher;
+    readonly properNounPhrases: PhraseMatcher;
+    readonly nouns: ReadonlySet<string>;
+    readonly verbs: ReadonlySet<string>;
+    readonly dictionary: Dictionary | null;
+};
+
+### dist/lexicon.d.ts#buildLexicon
+export declare function buildLexicon(config: ResolvedConfig, dictionary?: Dictionary | null): Lexicon;
+
+### dist/lint.d.ts#Linter
+export declare class Linter extends ProseLinter {
+    constructor(config: ResolvedConfig, lexicon?: Lexicon);
+    lintFile(path: string, displayPath?: string): Finding[];
+}
+
+### dist/lint.d.ts#lintText
+export declare function lintText(text: string, path: string, config: ResolvedConfig, lexicon?: Lexicon): Finding[];
+
+### dist/rules/index.d.ts#RULES
+export declare const RULES: readonly Rule[];
+
+### dist/rules/index.d.ts#getRule
+export declare function getRule(id: RuleId): Rule;
+
+### dist/rules/rule.d.ts#Rule
+export type Rule = {
+    readonly id: RuleId;
+    readonly description: string;
+    readonly ste: string;
+    readonly defaultSeverity: Severity;
+    readonly enabledByDefault?: boolean;
+    readonly scope: RuleScope;
+    check(unit: ProseUnit, context: RuleContext): void;
+};
+
+### dist/run-cli.d.ts#CliIo
+export type CliIo = {
+    readonly cwd: string;
+    readonly env: Readonly<Record<string, string | undefined>>;
+    readonly stdout: (text: string) => void;
+    readonly stderr: (text: string) => void;
+};
+
+### dist/run-cli.d.ts#CliOptions
+export type CliOptions = {
+    readonly patterns: readonly string[];
+    readonly format: "text" | "json";
+    readonly maxWarnings: number | null;
+    readonly configPath: string | null;
+    readonly help: boolean;
+};
+
+### dist/run-cli.d.ts#USAGE
+export declare const USAGE: string;
+
+### dist/run-cli.d.ts#parseArgs
+export declare function parseArgs(argv: readonly string[]): CliOptions;
+
+### dist/run-cli.d.ts#runCli
+export declare function runCli(argv: readonly string[], io: CliIo): number;
+
+### dist/source/code.d.ts#extractCode
+export declare function extractCode(text: string, path: string): Extraction;
+
+### dist/types.d.ts#Finding
+export type Finding = {
+    readonly file: string;
+    readonly line: number;
+    readonly column: number;
+    readonly endLine: number;
+    readonly endColumn: number;
+    readonly ruleId: RuleId;
+    readonly severity: Severity;
+    readonly message: string;
+};
+
+### dist/types.d.ts#RULE_IDS
+export declare const RULE_IDS: readonly ["sentence-length", "paragraph-length", "modal-verb", "semicolon", "latin-abbreviation", "about-quantity", "word-list", "gendered-pronoun", "first-person", "passive-instruction", "noun-cluster", "missing-subject", "doc-subject", "ing-verb", "unknown-word"];
+
+### dist/types.d.ts#RuleId
+export type RuleId = (typeof RULE_IDS)[number];
+
+### dist/types.d.ts#RuleSetting
+export type RuleSetting = Severity | "off";
+
+### dist/types.d.ts#Severity
+export type Severity = "error" | "warning";
+
+### dist/types.d.ts#isRuleId
+export declare function isRuleId(value: string): value is RuleId;
+
+### dist/word-list.d.ts#DEFAULT_WORD_LIST
+export declare const DEFAULT_WORD_LIST: readonly WordListEntry[];
+
+### dist/word-list.d.ts#WordListEntry
+export type WordListEntry = {
+    readonly id: string;
+    readonly match: readonly string[];
+    readonly suggest: string | null;
+    readonly note: string | null;
+    readonly severity: Severity;
+    readonly verbOnly: boolean;
+    readonly context: "reference" | null;
+};
