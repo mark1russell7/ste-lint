@@ -172,10 +172,10 @@ importers:
     devDependencies:
       '@mark1russell7/api-report':
         specifier: ^0.5.0
-        version: 0.5.6
+        version: 0.5.7
       '@mark1russell7/conventions':
         specifier: ^0.41.0
-        version: 0.41.10
+        version: 0.41.14
       '@mark1russell7/cue':
         specifier: ^2.1.1
         version: 2.1.4
@@ -409,13 +409,13 @@ packages:
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
 
-  '@mark1russell7/api-report@0.5.6':
-    resolution: {integrity: sha512-WgMnxnLhm7UoZL8aaosuAk8eik69SyhgoJ6y5rSwwX4A4v9kr98/DV+uGZE6B0XsO0oCg6cg57DhPMQKapKyrw==}
+  '@mark1russell7/api-report@0.5.7':
+    resolution: {integrity: sha512-Oe69KbJhZL6GIrbEwNVIFN+Yz5XLjgEt78CrQZFX7vdeGANWuRyDCoLQaebumVuyip52WpPt19ZQU7n3Oj5WmQ==}
     engines: {node: '>=22'}
     hasBin: true
 
-  '@mark1russell7/conventions@0.41.10':
-    resolution: {integrity: sha512-OD4i/u7PI2U1VORHfQLnkk52MIytd/q8NaqHGVet+V6X/FhekBu9qfMrM1NcnSmZEpTLFx5VvA1WwcW12K0pPQ==}
+  '@mark1russell7/conventions@0.41.14':
+    resolution: {integrity: sha512-GqmF9TE9SWnkj+heyy8addISBS7Q+q3tbvof40QpaxNmulixVoUROUIullzuvfl27yUBVED2RL/eBUaXe/AZFg==}
     engines: {node: '>=22'}
     hasBin: true
 
@@ -964,11 +964,11 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.6.0
 
-  '@mark1russell7/api-report@0.5.6':
+  '@mark1russell7/api-report@0.5.7':
     dependencies:
-      '@mark1russell7/conventions': 0.41.10
+      '@mark1russell7/conventions': 0.41.14
 
-  '@mark1russell7/conventions@0.41.10':
+  '@mark1russell7/conventions@0.41.14':
     dependencies:
       yaml: 2.9.1
 
