@@ -48,11 +48,9 @@ buildLexicon: dist/lexicon.d.ts#buildLexicon
 extractCode: dist/source/code.d.ts#extractCode
 fileKind: dist/engine.d.ts#fileKind
 findConfigFile: dist/config.d.ts#findConfigFile
-findFiles: dist/files.d.ts#findFiles
 formatJson: dist/format.d.ts#formatJson
 formatText: dist/format.d.ts#formatText
 getRule: dist/rules/index.d.ts#getRule
-globToRegExp: dist/files.d.ts#globToRegExp
 isRuleId: dist/types.d.ts#isRuleId
 lintText: dist/lint.d.ts#lintText
 loadConfig: dist/config.d.ts#loadConfig
@@ -287,12 +285,6 @@ export type ProseLinterOptions = {
 
 ### dist/engine.d.ts#fileKind
 export declare function fileKind(path: string): FileKind | null;
-
-### dist/files.d.ts#findFiles
-export declare function findFiles(options: FindOptions): string[];
-
-### dist/files.d.ts#globToRegExp
-export declare function globToRegExp(glob: string): RegExp;
 
 ### dist/format.d.ts#RuleCount
 export type RuleCount = {

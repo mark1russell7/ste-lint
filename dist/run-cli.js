@@ -6,7 +6,7 @@ import { existsSync } from "node:fs";
 import { relative, resolve, sep } from "node:path";
 import { ConfigError, DICTIONARY_ENV, loadConfig } from "./config.js";
 import { DictionaryError, loadDictionary } from "./dictionary.js";
-import { findFiles } from "./files.js";
+import { findFiles } from "@mark1russell7/files";
 import { formatJson, formatText, summarize } from "./format.js";
 import { buildLexicon } from "./lexicon.js";
 import { fileKind, Linter } from "./lint.js";

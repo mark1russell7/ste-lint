@@ -6,7 +6,6 @@
  */
 export { baseConfig, CONFIG_FILE_NAME, ConfigError, DEFAULT_IGNORE, DEFAULT_INCLUDE, DEFAULT_LIMITS, DICTIONARY_ENV, findConfigFile, loadConfig, mergeWordList, resolveConfig, validateConfig, } from "./config.js";
 export { Dictionary, DICTIONARY_FORMAT, DictionaryError, loadDictionary, parseDictionary } from "./dictionary.js";
-export { findFiles, globToRegExp } from "./files.js";
 export { formatJson, formatText, summarize } from "./format.js";
 export { buildLexicon } from "./lexicon.js";
 export { ProseLinter } from "./engine.js";
