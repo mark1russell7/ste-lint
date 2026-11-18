@@ -48,7 +48,7 @@
   "scripts": {
     "build": "tsc -b",
     "typecheck": "tsc -p tsconfig.test.json && pnpm --filter @ste-lint/site run typecheck",
-    "test": "vitest run",
+    "test": "vitest run && pnpm --filter @ste-lint/site run test",
     "lint:ste": "tsx src/cli.ts",
     "check:conventions": "conventions check",
     "check:api": "api-report check"
