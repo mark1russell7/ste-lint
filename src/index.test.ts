@@ -5,7 +5,7 @@ describe("public API", () => {
     it("exports the linter, the configuration, the dictionary, the CLI and the rules", () => {
         for (const name of [
             "Linter", "lintText", "fileKind", "loadConfig", "resolveConfig", "validateConfig", "findConfigFile", "mergeWordList",
-            "ConfigError", "Dictionary", "DictionaryError", "loadDictionary", "parseDictionary", "findFiles", "globToRegExp",
+            "ConfigError", "Dictionary", "DictionaryError", "loadDictionary", "parseDictionary",
             "formatJson", "formatText", "summarize", "buildLexicon", "getRule", "RULES", "parseArgs", "runCli", "isRuleId",
         ]) {
             expect(api).toHaveProperty(name);

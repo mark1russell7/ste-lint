@@ -26,7 +26,6 @@ export {
     type WordListEntryConfig,
 } from "./config.js";
 export { Dictionary, DICTIONARY_FORMAT, DictionaryError, loadDictionary, parseDictionary, type DictionaryEntry, type DictionaryLookup } from "./dictionary.js";
-export { findFiles, globToRegExp } from "./files.js";
 export { formatJson, formatText, summarize, type RuleCount, type Summary } from "./format.js";
 export { buildLexicon, type Lexicon } from "./lexicon.js";
 export { ProseLinter, type CodeExtractor, type ProseLinterOptions } from "./engine.js";

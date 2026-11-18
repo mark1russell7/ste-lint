@@ -1,8 +1,11 @@
+// The globs and the walk of @mark1russell7/files, as ste-lint uses them. Before 0.4.0, ste-lint had a copy of these
+// functions in src/files.ts. These cases are the tests of that copy, so they pin each lint result of the move.
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, relative, sep } from "node:path";
+import { findFiles } from "@mark1russell7/files";
+import { globBase, globToRegExp, isGlob } from "@mark1russell7/files/glob";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { findFiles, globBase, globToRegExp, isGlob } from "./files.js";
 
 describe("globToRegExp", () => {
     const matches = (glob : string, path : string) : boolean => globToRegExp(glob).test(path);
@@ -34,6 +37,13 @@ describe("globToRegExp", () => {
     it("escapes regular expression characters and accepts ./ and backslashes", () => {
         expect(matches("a+b.(c)", "a+b.(c)")).toBe(true);
         expect(matches("./docs\\*.md", "docs/a.md")).toBe(true);
+    });
+
+    it("has the two differences from the copy before 0.4.0", () => {
+        // A glob that ends in /** also matches its folder. Thus an ignore glob "x/**" also ignores a file at the path "x".
+        expect(matches("dist/**", "dist")).toBe(true);
+        // A set that starts with ! does not match a /, so it stays in one segment.
+        expect(matches("a[!b]c", "a/c")).toBe(false);
     });
 
     it("finds the static base directory of a pattern", () => {
