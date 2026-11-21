@@ -55,7 +55,7 @@
   },
   "dependencies": {
     "@mark1russell7/files": "^0.0.4",
-    "typescript": "^6.0.3"
+    "typescript": "^7.0.0"
   },
   "devDependencies": {
     "@mark1russell7/api-report": "^0.5.0",
