@@ -187,7 +187,7 @@ importers:
         version: 0.5.18
       '@mark1russell7/conventions':
         specifier: ^0.50.1
-        version: 0.50.1
+        version: 0.50.7
       '@mark1russell7/cue':
         specifier: ^2.1.1
         version: 2.1.4
@@ -435,8 +435,8 @@ packages:
     engines: {node: '>=22'}
     hasBin: true
 
-  '@mark1russell7/conventions@0.50.1':
-    resolution: {integrity: sha512-ZC/59yQMHeDyc2z5vOeQOGBFBWvgUGDHXEeAwH8AFwBcqY1y0tne/1Wb5kVTPiMH2CLYq1ksxFQ2dSf/ftQBvQ==}
+  '@mark1russell7/conventions@0.50.7':
+    resolution: {integrity: sha512-1tx4G5JETCH+sccyKiNXi9rVviMEnFJS3RNpPnwI5/3Cp2DFKkyGZCKJpEh+uXJ5BSli5NrgWAV0lWTOnKWHSQ==}
     engines: {node: '>=22'}
     hasBin: true
 
@@ -1025,9 +1025,9 @@ snapshots:
 
   '@mark1russell7/api-report@0.5.18':
     dependencies:
-      '@mark1russell7/conventions': 0.50.1
+      '@mark1russell7/conventions': 0.50.7
 
-  '@mark1russell7/conventions@0.50.1':
+  '@mark1russell7/conventions@0.50.7':
     dependencies:
       '@mark1russell7/text': 0.0.17
       yaml: 2.9.1
