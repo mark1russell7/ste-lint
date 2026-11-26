@@ -5,7 +5,7 @@
   "description": "A linter for the writing rules of ASD-STE100 Simplified Technical English in Markdown, MDX and TypeScript doc comments",
   "license": "MIT",
   "type": "module",
-  "packageManager": "pnpm@12.21.0",
+  "packageManager": "pnpm@12.23.0",
   "engines": {
     "node": ">=22"
   },
