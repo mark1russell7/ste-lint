@@ -186,8 +186,8 @@ importers:
   .:
     dependencies:
       '@mark1russell7/files':
-        specifier: ^0.0.6
-        version: 0.0.6
+        specifier: ^0.0.7
+        version: 0.0.7
       typescript:
         specifier: ^6.0.3
         version: 6.0.3
@@ -459,8 +459,8 @@ packages:
     engines: {node: '>=22'}
     hasBin: true
 
-  '@mark1russell7/files@0.0.6':
-    resolution: {integrity: sha512-VLsy9pwIP1LuDEOkzVpUKU/SOTw+/d3F/IYjSp0Fj+Cqfl440Qs/ad5islvClQEKPNmiDp5Zs+VraNO2QQ/MkQ==}
+  '@mark1russell7/files@0.0.7':
+    resolution: {integrity: sha512-Fa848T4nRyQClxX1eAH9rpnJFdxQ2apKsty1wUIg/OYHVIDR2Yw845upYSrafMQbN2DVMS3EFDCTj7C5Ebj2pQ==}
     engines: {node: '>=22'}
 
   '@mark1russell7/text@0.0.20':
@@ -1051,7 +1051,7 @@ snapshots:
 
   '@mark1russell7/cue@2.1.4': {}
 
-  '@mark1russell7/files@0.0.6': {}
+  '@mark1russell7/files@0.0.7': {}
 
   '@mark1russell7/text@0.0.20': {}
 
